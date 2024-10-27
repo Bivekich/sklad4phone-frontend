@@ -1,0 +1,15 @@
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+header .wallet {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
