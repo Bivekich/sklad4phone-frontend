@@ -1,6 +1,6 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 0;
   width: 100%;
   text-align: center;
@@ -26,4 +26,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+button {
+  width: 100%;
+  text-align: center;
+  background-color: #bbfb4c;
+  border-radius: 10000px;
 }
