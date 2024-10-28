@@ -1,0 +1,35 @@
+.user_card {
+    background: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: auto;
+    font-size: 13px;
+    border: 2px solid #bbfb4c;
+    padding: 0;
+    padding-left: 1rem;
+    border-radius: 25px;
+}
+
+.user_card .info {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    margin-right: 1rem;
+}
+
+.user_card .info_col {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    width: 33%;
+}
+
+.user_card span {
+    margin-left: 0.1rem;
+}
+.user_card button {
+    padding: 0.1rem 0.7rem;
+    width: fit-content;
+}

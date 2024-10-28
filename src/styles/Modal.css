@@ -1,0 +1,149 @@
+/* CardModal.css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modal-overlay .modal-content {
+    background: #181818;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: auto 1rem;
+}
+
+.modal-overlay .modal-price {
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
+
+.modal-overlay .modal-progress {
+    font-size: 1rem;
+    color: #666;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    color: #f0f5f4;
+    font-weight: 600;
+}
+
+.modal-overlay button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.modal-overlay .close-button {
+    background: transparent;
+    width: fit-content;
+    margin: 0 0 0 auto;
+    color: #bbfb4c;
+    padding: 0;
+}
+
+.modal-overlay img {
+    width: 100%;
+}
+
+.modal-overlay h2 {
+    color: #bbfb4c;
+}
+/* CardModal.css */
+
+/* Customize the range input */
+.modal-overlay .amount-slider {
+    -webkit-appearance: none; /* Remove default styling for WebKit browsers */
+    appearance: none; /* Remove default styling for other browsers */
+    width: 100%; /* Make the slider full width */
+    height: 8px; /* Height of the track */
+    border-radius: 5px; /* Round edges */
+    background: #333; /* Dark gray background color of the track */
+    outline: none; /* Remove outline */
+    margin: 10px 0; /* Add margin */
+}
+
+/* Style the thumb (the draggable part of the slider) */
+.modal-overlay .amount-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default styling for WebKit browsers */
+    appearance: none; /* Remove default styling for other browsers */
+    width: 20px; /* Width of the thumb */
+    height: 20px; /* Height of the thumb */
+    border-radius: 50%; /* Make it round */
+    background: #bbfb4c; /* Accent color of the thumb */
+    transform: translateY(-25%);
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Style for Firefox */
+.modal-overlay .amount-slider::-moz-range-thumb {
+    width: 20px; /* Width of the thumb */
+    height: 20px; /* Height of the thumb */
+    border-radius: 50%; /* Make it round */
+    background: #bbfb4c; /* Accent color of the thumb */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Style the track (the bar under the thumb) for WebKit browsers */
+.modal-overlay .amount-slider::-webkit-slider-runnable-track {
+    height: 8px; /* Height of the track */
+    border-radius: 5px; /* Round edges */
+    background: #333; /* Dark gray background color of the track */
+}
+
+/* Style the track for Firefox */
+.modal-overlay .amount-slider::-moz-range-track {
+    height: 8px; /* Height of the track */
+    border-radius: 5px; /* Round edges */
+    background: #333; /* Dark gray background color of the track */
+}
+
+/* Style for IE */
+.modal-overlay .amount-slider::-ms-track {
+    width: 100%; /* Full width */
+    height: 8px; /* Height of the track */
+    background: transparent; /* Remove background */
+    border-color: transparent; /* Remove border */
+    color: transparent; /* Remove color */
+}
+
+/* Style the track for IE */
+.modal-overlay .amount-slider::-ms-fill-lower {
+    background: #bbfb4c; /* Accent color for the lower part */
+    border-radius: 5px; /* Round edges */
+}
+
+.modal-overlay .amount-slider::-ms-fill-upper {
+    background: #333; /* Dark gray color for the upper part */
+    border-radius: 5px; /* Round edges */
+}
+
+/* Style the thumb for IE */
+.modal-overlay .amount-slider::-ms-thumb {
+    width: 20px; /* Width of the thumb */
+    height: 20px; /* Height of the thumb */
+    border-radius: 50%; /* Make it round */
+    background: #bbfb4c; /* Accent color of the thumb */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.modal-overlay .two_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.modal-overlay .second_button {
+    background: transparent;
+    border: 2px solid #bbfb4c;
+    color: #bbfb4c;
+}

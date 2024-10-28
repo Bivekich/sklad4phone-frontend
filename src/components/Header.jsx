@@ -1,10 +1,7 @@
 import { useState } from "react";
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
-import { user } from "../server";
-
-console.log(user);
-const Header = () => {
+const Header = ({ user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -19,7 +16,7 @@ const Header = () => {
         </button>
         <img src="logo_header.svg" alt="logo" />
         <div className="wallet">
-          <span>{user.balance}</span>
+          <span>{user ? user.balance : "Loading..."}</span>
           <img src="wallet.svg" alt="wallet" />
         </div>
       </header>
@@ -33,8 +30,8 @@ const Header = () => {
           <div className="acc_info">
             <img src="default_ava.svg" alt="default_ava" />
             <div className="acc_info_col">
-              <h3>{user.first_name}</h3>
-              <span>ID: {user.id}</span>
+              <h3>{user ? user.first_name : "Loading..."}</h3>
+              <span>ID: {user ? user.id : "Loading..."}</span>
             </div>
           </div>
           <div className="hr"></div>
@@ -43,14 +40,25 @@ const Header = () => {
               <img src="home.svg" alt="home" />
               <Link to="/">Главная</Link>
             </li>
-            <li>
-              <img src="person.svg" alt="person" />
-              <Link to="/account">Мой аккаунт</Link>
-            </li>
-            <li>
-              <img src="history.svg" alt="history" />
-              <Link to="/history">История сборов</Link>
-            </li>
+            {user.admin ? (
+              <>
+                <li>
+                  <img src="person.svg" alt="person" />
+                  <Link to="/users">Пользлователи</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <img src="person.svg" alt="person" />
+                  <Link to="/account">Мой аккаунт</Link>
+                </li>
+                <li>
+                  <img src="history.svg" alt="history" />
+                  <Link to="/history">История сборов</Link>
+                </li>
+              </>
+            )}
             <li>
               <img src="bell.svg" alt="bell" />
               <Link to="#services">Уведомления</Link>
@@ -59,18 +67,22 @@ const Header = () => {
               <img src="headphones.svg" alt="headphones" />
               <Link to="/support">Техподдержка</Link>
             </li>
-            <li>
-              <img src="contract.svg" alt="contract" />
-              <Link to="#services">Договор оферты</Link>
-            </li>
-            <li>
-              <img src="document.svg" alt="document" />
-              <Link to="#services">Правила сервиса</Link>
-            </li>
-            <li>
-              <img src="checkmark.svg" alt="checkmark" />
-              <Link to="#services">Гарантии</Link>
-            </li>
+            {!user.admin && (
+              <>
+                <li>
+                  <img src="contract.svg" alt="contract" />
+                  <Link to="#services">Договор оферты</Link>
+                </li>
+                <li>
+                  <img src="document.svg" alt="document" />
+                  <Link to="#services">Правила сервиса</Link>
+                </li>
+                <li>
+                  <img src="checkmark.svg" alt="checkmark" />
+                  <Link to="#services">Гарантии</Link>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>

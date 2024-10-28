@@ -1,0 +1,7 @@
+/* UserList.css */
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Spacing between user cards */
+    padding: 1rem;
+}
