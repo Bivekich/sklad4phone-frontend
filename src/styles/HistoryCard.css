@@ -1,0 +1,44 @@
+.historyCard {
+  border: 2px solid #bbfb4c;
+  width: auto;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem;
+  /* margin: 0.5rem; */
+  gap: 0.5rem;
+  background: transparent;
+  margin: 1rem;
+}
+
+.historyCard .info {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+  justify-content: start;
+  gap: 0.5rem;
+}
+
+.historyCard .status {
+  border-radius: 100px;
+  background: #bbfb4c;
+  padding: 0 2rem;
+  height: fit-content;
+  color: black;
+  margin-top: auto;
+}
+
+.historyCard .date {
+  margin-top: auto;
+  font-weight: 700;
+  color: #f0f5f4;
+  font-size: 15px;
+}
+
+.historyCard img {
+  height: 70px;
+  width: 70px;
+  margin: auto 0;
+}

@@ -36,6 +36,20 @@ export const getUserByPhoneNumber = async (phoneNumber) => {
   }
 };
 
+export const updateUserById = async (id, updateData) => {
+  try {
+    const response = await axiosInstance.patch(`/users/update`, updateData, {
+      params: { id }, // Pass ID as a query parameter
+    });
+
+    console.log("Updated user data:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
 // New function to fetch all users
 export const getAllUsers = async () => {
   try {
@@ -52,12 +66,16 @@ export const getAllUsers = async () => {
 // Function to create a new sale
 export const createSale = async (saleData) => {
   try {
-    const response = await axiosInstance.post("/sales", saleData);
+    const response = await axiosInstance.post("/sales/create", saleData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Important for file uploads
+      },
+    });
     console.log("Sale created:", response.data);
     return response.data;
   } catch (error) {
-    handleAxiosError(error);
-    throw error;
+    handleAxiosError(error); // Ensure this function is well defined to handle errors
+    throw error; // Rethrow the error for further handling if necessary
   }
 };
 
@@ -104,6 +122,42 @@ export const deleteSale = async (id) => {
     console.log("Sale deleted:", response.data);
     return response.data;
   } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+export const buyForSale = async (id, quantity) => {
+  try {
+    const response = await axiosInstance.post(`/sales/${id}/buy`, {
+      quantity,
+      phoneNumber,
+    });
+    console.log("Sale purchased:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      // Check if the error message indicates insufficient funds
+      if (error.response.data.message === "Insufficient balance") {
+        alert("У вас не достаточно средств на счёте.");
+      }
+    }
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+export const getUserOrders = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/sales/userorders/${phoneNumber}`,
+    );
+    console.log("User orders retrieved:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      alert("Пользователь с таким номером телефона не найден.");
+    }
     handleAxiosError(error);
     throw error;
   }

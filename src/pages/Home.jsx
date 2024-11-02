@@ -1,11 +1,11 @@
 import Search from "../components/Search";
 import CardList from "../components/Card/CardList";
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <>
       <Search />
-      <CardList />
+      <CardList user={user} />
     </>
   );
 };

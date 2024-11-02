@@ -11,6 +11,7 @@
     justify-content: center;
     align-items: center;
     z-index: 10000;
+    overflow-y: auto;
 }
 
 .modal-overlay .modal-content {
@@ -146,4 +147,44 @@
     background: transparent;
     border: 2px solid #bbfb4c;
     color: #bbfb4c;
+}
+
+.modal-overlay .rating-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    width: fit-content;
+    margin: 0rem auto;
+}
+
+.modal-overlay .rating-controls span {
+    font-weight: 600;
+}
+.modal-overlay .rating-controls button {
+    width: fit-content;
+    margin: 0;
+}
+.modal-overlay .raiting > span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-overlay .editCardLabel {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: felx;
+    flex-direction: column;
+}
+
+.modal-overlay .editCardLabel input,
+.modal-overlay .editCardLabel textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }

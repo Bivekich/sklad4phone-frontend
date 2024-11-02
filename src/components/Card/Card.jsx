@@ -4,6 +4,8 @@ import CardModal from "./CardModal"; // Import the CardModal
 import "../../styles/Card.css";
 
 const Card = ({
+  admin,
+  id,
   image,
   name,
   description,
@@ -45,7 +47,7 @@ const Card = ({
             <span>{description}</span>
           </div>
           <button type="button" onClick={handleShow}>
-            Подробнее
+            {admin ? `Редактировать` : `Подробнее`}
           </button>
         </div>
         <div className="price">{price}₽</div>
@@ -65,7 +67,9 @@ const Card = ({
       <CardModal
         isOpen={isModalOpen}
         onClose={handleClose}
+        admin={admin}
         product={{
+          id,
           image,
           name,
           description,
@@ -80,6 +84,8 @@ const Card = ({
 
 // Define the prop types for the Card component
 Card.propTypes = {
+  admin: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,

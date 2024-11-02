@@ -31,7 +31,7 @@ const UserList = () => {
             first_name={user.first_name}
             id={user.id}
             phone_number={user.phone_number}
-            raiting={`${user.raiting / 10}.${user.raiting % 10}`}
+            raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
           />
         ))
       ) : (

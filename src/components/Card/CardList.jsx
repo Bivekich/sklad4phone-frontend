@@ -2,43 +2,11 @@ import { useEffect, useState } from "react";
 import "../../styles/CardList.css";
 import Card from "./Card";
 import { getAllSales } from "../../server"; // Import the function to get sales
+import CreateCard from "./CreateCard";
 
-const CardList = () => {
-  // const cards = [
-  //   {
-  //     image: "",
-  //     name: "uqewr",
-  //     description: "qwer werwr ...",
-  //     price: "9999",
-  //     collected_need: 100,
-  //     collected_now: 70,
-  //   },
-  //   {
-  //     image: "",
-  //     name: "uqewr",
-  //     description: "qwer werwr ...",
-  //     price: "9999",
-  //     collected_need: 100,
-  //     collected_now: 50,
-  //   },
-  //   {
-  //     image: "",
-  //     name: "uqewr",
-  //     description: "qwer werwr ...",
-  //     price: "9999",
-  //     collected_need: 100,
-  //     collected_now: 20,
-  //   },
-  //   {
-  //     image: "",
-  //     name: "uqewr",
-  //     description: "qwer werwr ...",
-  //     price: "9999",
-  //     collected_need: 100,
-  //     collected_now: 10,
-  //   },
-  // ];
+const CardList = ({ user }) => {
   const [cards, setCards] = useState([]);
+  const [modal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchSales = async () => {
@@ -53,15 +21,22 @@ const CardList = () => {
     fetchSales(); // Trigger the fetch function
   }, []);
 
-  console.log(cards);
-
   return (
     <>
       <div className="cards_container">
-        <h3>Сборы</h3>
+        <h3 style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+          Сборы{" "}
+          {user.admin && (
+            <button className="smallButton" onClick={() => setShowModal(true)}>
+              Создать сбор
+            </button>
+          )}
+        </h3>
         {cards.map((item, index) => (
           <Card
             key={index}
+            admin={user.admin}
+            id={item.id}
             image={item.image}
             name={item.name}
             description={item.description}
@@ -71,6 +46,9 @@ const CardList = () => {
           />
         ))}
       </div>
+      {modal && (
+        <CreateCard isOpen={modal} onClose={() => setShowModal(false)} />
+      )}
     </>
   );
 };

@@ -39,8 +39,8 @@ function App() {
         <Route path="/" element={<Layout user={user} />}>
           {" "}
           {/* Pass user here */}
-          <Route path="/" element={<Home />} />
-          <Route path="/account" element={<Account />} />
+          <Route path="/" element={<Home user={user} />} />
+          <Route path="/account" element={<Account user={user} />} />
           <Route path="/support" element={<Support />} />
           <Route path="/history" element={<History />} />
           {user &&

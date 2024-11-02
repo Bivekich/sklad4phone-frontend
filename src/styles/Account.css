@@ -1,0 +1,10 @@
+.account {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 0 auto;
+}
+.account img {
+    width: 30%;
+    margin: 0 auto;
+}
