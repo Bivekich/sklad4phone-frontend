@@ -147,17 +147,171 @@ export const buyForSale = async (id, quantity) => {
   }
 };
 
-export const getUserOrders = async () => {
+export const getUserOrders = async (phone = phoneNumber) => {
   try {
-    const response = await axiosInstance.get(
-      `/sales/userorders/${phoneNumber}`,
-    );
+    const response = await axiosInstance.get(`/sales/userorders/${phone}`);
     console.log("User orders retrieved:", response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
       alert("Пользователь с таким номером телефона не найден.");
     }
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to create a new support ticket
+export const createSupportTicket = async (supportData) => {
+  try {
+    const response = await axiosInstance.post("/support/create", supportData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Support ticket created:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to get all support tickets
+export const getAllSupportTickets = async () => {
+  try {
+    const response = await axiosInstance.get("/support/tickets");
+    console.log("All support tickets:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to get a support ticket by ID
+export const getSupportTicketById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/support/tickets/${id}`);
+    console.log("Support ticket data:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to update a support ticket by ID
+export const updateSupportTicket = async (id, updateData) => {
+  try {
+    const response = await axiosInstance.put(
+      `/support/tickets/${id}`,
+      updateData,
+    );
+    console.log("Updated support ticket:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to delete a support ticket by ID
+export const deleteSupportTicket = async (id) => {
+  try {
+    const response = await axiosInstance.delete(`/support/tickets/${id}`);
+    console.log("Support ticket deleted:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to update the status of a support ticket
+export const updateSupportTicketStatus = async (id, status) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/support/tickets/${id}/status`,
+      {
+        status,
+      },
+    );
+    console.log("Updated support ticket status:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to get all transactions
+export const getAllTransactions = async () => {
+  try {
+    const response = await axiosInstance.get("/transactions");
+    console.log("All transactions:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to get a single transaction by ID
+export const getTransactionById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/transactions/${id}`);
+    console.log(`Transaction ${id}:`, response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to create a new transaction
+export const createTransaction = async (amount, saleId = null) => {
+  try {
+    const response = await axiosInstance.post("/transactions", {
+      phoneNumber,
+      amount,
+      saleId,
+    });
+    console.log("Created transaction:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to update the status of a transaction
+export const updateTransactionStatus = async (id, paid = false) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/transactions/${id}/setpaidstatus`,
+      {
+        paid,
+      },
+    );
+    console.log(`Updated transaction ${id} status:`, response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Function to send a notification to a user
+export const sendNotification = async (message) => {
+  try {
+    const response = await axiosInstance.post("/notifications/send", {
+      phoneNumber,
+      message,
+    });
+    console.log(`Notification sent to ${phoneNumber}:`, response.data);
+    return response.data;
+  } catch (error) {
     handleAxiosError(error);
     throw error;
   }

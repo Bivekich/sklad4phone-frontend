@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css"; // Ensure you have appropriate styles for the modal
-import { buyForSale, deleteSale, updateSale } from "../../server";
+import {
+  buyForSale,
+  deleteSale,
+  updateSale,
+  createTransaction,
+} from "../../server";
 
 const CardModal = ({ isOpen, onClose, admin, product }) => {
   const [selectedAmount, setSelectedAmount] = useState(1);
   const [step, setStep] = useState(0);
   const [editMode, setEditMode] = useState(false); // State to track edit mode
   const [editedProduct, setEditedProduct] = useState(product); // State for edited product data
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for image slider
 
   useEffect(() => {
     setStep(0);
@@ -28,8 +34,14 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     setStep((prevStep) => prevStep - 1);
   };
 
+  const handlePay = () => {
+    createTransaction(product.price * selectedAmount, product.id);
+    setStep(3);
+  };
+
   const handleDelete = async () => {
     await deleteSale(product.id);
+    alert("Сбор успешно удален!");
     window.location.reload();
   };
 
@@ -66,6 +78,18 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({ ...prev, [name]: value }));
   };
+  // Image slider navigation
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex < product.images.length - 1 ? prevIndex + 1 : 0,
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : product.images.length - 1,
+    );
+  };
 
   // Step 0: Show product details and the slider
   if (step === 0 && !editMode) {
@@ -75,12 +99,24 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <img src={product.image} alt={product.name} />
-          <h2>{product.name}</h2>
-          <p>{product.description}</p>
+          {/* Image Slider */}
+          <div className="image-slider">
+            <img
+              src={product.images[currentImageIndex]}
+              alt={editedProduct.name}
+            />
+            <div className="two_buttons">
+              <button onClick={prevImage}>&#10094;</button>
+              <button onClick={nextImage}>&#10095;</button>
+            </div>
+          </div>
+          <h2>{editedProduct.name}</h2>
+          <p>{editedProduct.description}</p>
           <div className="modal-progress">
             <span>{selectedAmount}</span>
-            <span>{product.collected_need - product.collected_now}</span>
+            <span>
+              {editedProduct.collected_need - editedProduct.collected_now}
+            </span>
           </div>
 
           {/* Slider for selecting amount */}
@@ -88,7 +124,7 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             <input
               type="range"
               min="1"
-              max={product.collected_need - product.collected_now}
+              max={editedProduct.collected_need - editedProduct.collected_now}
               value={selectedAmount}
               onChange={handleSliderChange}
               className="amount-slider"
@@ -97,13 +133,13 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           </div>
 
           <div className="modal-price">
-            Сумма: {product.price * selectedAmount}₽
+            Сумма: {product.price * selectedAmount}$
           </div>
           {admin ? (
             <>
               <button onClick={() => setEditMode(true)}>Редактировать</button>
               <button onClick={handleDelete}>Удалить</button>
-              <button onClick={handleSave}>Готово</button>
+              <button onClick={onClose}>Готово</button>
             </>
           ) : (
             <>
@@ -142,7 +178,7 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
                 onChange={handleEditChange}
               />
             </label>
-            <label className="editCardLabel">
+            {/* <label className="editCardLabel">
               Цена:
               <input
                 type="number"
@@ -150,8 +186,8 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
                 value={editedProduct.price}
                 onChange={handleEditChange}
               />
-            </label>
-            <label className="editCardLabel">
+            </label> */}
+            {/* <label className="editCardLabel">
               Собрано сейчас:
               <input
                 type="number"
@@ -168,7 +204,25 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
                 value={editedProduct.collected_need}
                 onChange={handleEditChange}
               />
-            </label>
+            </label> */}
+            <div className="modal-progress">
+              <span>1</span>
+              <span>{editedProduct.collected_need}</span>
+            </div>
+            <div className="slider-container">
+              <input
+                type="range"
+                min="1"
+                name="collected_now"
+                max={editedProduct.collected_need}
+                value={editedProduct.collected_now}
+                onChange={handleEditChange}
+                className="amount-slider"
+              />
+              <div className="slider-value">
+                Собрано сейчас: {editedProduct.collected_now} шт
+              </div>
+            </div>
           </div>
           <div className="two_buttons">
             <button onClick={() => setEditMode(false)}>Отменить</button>
@@ -214,6 +268,23 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <div className="two_buttons">
             <button onClick={handleBuyFromBalance}>Оплатить с баланса</button>
           </div>
+          <div className="two_buttons">
+            <button onClick={handlePay}>Оплатить через менеджера</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 3) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="close-button" onClick={onClose}>
+            &#215;
+          </button>
+          <p>Свяжитесь с менеджером для оплаты</p>
+          <h2>В телеграм: VladimirEHoffman</h2>
         </div>
       </div>
     );
@@ -229,7 +300,7 @@ CardModal.propTypes = {
   admin: PropTypes.bool.isRequired,
   product: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    image: PropTypes.string.isRequired,
+    images: PropTypes.arrayOf(PropTypes.string).isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,

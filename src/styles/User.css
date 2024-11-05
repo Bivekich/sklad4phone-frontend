@@ -32,4 +32,5 @@
 .user_card button {
     padding: 0.1rem 0.7rem;
     width: fit-content;
+    border-radius: 20px;
 }

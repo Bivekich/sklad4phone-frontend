@@ -6,21 +6,21 @@ import "../../styles/Card.css";
 const Card = ({
   admin,
   id,
-  image,
+  images, // Accept images as an array
   name,
   description,
   price,
   collected_need,
   collected_now,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleShow = () => {
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true);
   };
 
   const handleClose = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   const progressPercentage = Math.min(
@@ -40,7 +40,8 @@ const Card = ({
   return (
     <>
       <div className="card">
-        <img src={image} alt={name} />
+        <img src={images[0]} alt={name} />{" "}
+        {/* Display the first image as preview */}
         <div className="info">
           <div className="text_info">
             <h4>{name}</h4>
@@ -50,7 +51,7 @@ const Card = ({
             {admin ? `Редактировать` : `Подробнее`}
           </button>
         </div>
-        <div className="price">{price}₽</div>
+        <div className="price">{price}$</div>
         <div
           className="process_round"
           style={{
@@ -70,7 +71,7 @@ const Card = ({
         admin={admin}
         product={{
           id,
-          image,
+          images, // Pass all images to the modal
           name,
           description,
           price,
@@ -82,11 +83,10 @@ const Card = ({
   );
 };
 
-// Define the prop types for the Card component
 Card.propTypes = {
   admin: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
+  images: PropTypes.arrayOf(PropTypes.string).isRequired, // Ensure it's an array
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,

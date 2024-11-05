@@ -1,11 +1,18 @@
 import { useState } from "react";
-import "../styles/Header.css";
 import { Link } from "react-router-dom";
+import "../styles/Header.css";
+import BalanceModal from "./BalanceModal";
+
 const Header = ({ user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isBalanceModalOpen, setIsBalanceModalOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleBalanceModal = () => {
+    setIsBalanceModalOpen(!isBalanceModalOpen);
   };
 
   return (
@@ -15,7 +22,7 @@ const Header = ({ user }) => {
           <img src="menu.svg" alt="menu" />
         </button>
         <img src="logo_header.svg" alt="logo" />
-        <div className="wallet">
+        <div className="wallet" onClick={toggleBalanceModal}>
           <span>{user ? user.balance : "Loading..."}</span>
           <img src="wallet.svg" alt="wallet" />
         </div>
@@ -44,7 +51,11 @@ const Header = ({ user }) => {
               <>
                 <li>
                   <img src="person.svg" alt="person" />
-                  <Link to="/users">Пользлователи</Link>
+                  <Link to="/users">Пользователи</Link>
+                </li>
+                <li>
+                  <img src="book.svg" alt="book" />
+                  <Link to="/users-booking">Бронь пользователей</Link>
                 </li>
               </>
             ) : (
@@ -89,6 +100,14 @@ const Header = ({ user }) => {
 
       {/* Overlay to close menu when clicked outside */}
       {isMenuOpen && <div className="overlay" onClick={toggleMenu}></div>}
+
+      {/* Balance Modal */}
+      {isBalanceModalOpen && (
+        <>
+          <BalanceModal onClose={toggleBalanceModal} />
+          <div className="overlay" onClick={toggleBalanceModal}></div>
+        </>
+      )}
     </>
   );
 };

@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css"; // Import styles for UserModal
-import { updateUserById } from "../../server";
+import HistoryCard from "../HistoryCard";
+import { updateUserById, getUserOrders } from "../../server";
 
 const UserModal = ({ isOpen, onClose, user }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [orders, setOrders] = useState([]);
   const [editedUser, setEditedUser] = useState({
     first_name: user.first_name,
     phone_number: user.phone_number,
     balance: user.balance,
     raiting: user.raiting,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getUserOrders(editedUser.phone_number);
+      setOrders(response);
+    };
+
+    fetchData();
+  }, []);
 
   if (!isOpen) return null; // If not open, return null
 
@@ -47,14 +58,14 @@ const UserModal = ({ isOpen, onClose, user }) => {
   const increaseRating = () => {
     setEditedUser((prev) => ({
       ...prev,
-      raiting: prev.raiting !== 10 ? prev.raiting + 0.5 : 10,
+      raiting: prev.raiting <= 10 ? prev.raiting + 0.1 : 10,
     }));
   };
 
   const decreaseRating = () => {
     setEditedUser((prev) => ({
       ...prev,
-      raiting: prev.raiting > 0 ? prev.raiting - 0.5 : 0,
+      raiting: prev.raiting > 0 ? prev.raiting - 0.1 : 0,
     }));
   };
 
@@ -127,6 +138,25 @@ const UserModal = ({ isOpen, onClose, user }) => {
             <button onClick={handleEditToggle} className="edit-button">
               Редактировать
             </button>
+          )}
+        </div>
+        <div>
+          <h2>История сборов</h2>
+          {orders.length > 0 ? (
+            <ul>
+              {orders.map((order) => (
+                <HistoryCard
+                  key={order.id}
+                  image={order.image}
+                  title={order.name}
+                  price={order.price}
+                  status={"Зарезервирован"}
+                  date=""
+                />
+              ))}
+            </ul>
+          ) : (
+            <div>Пока что здесь пусто(</div>
           )}
         </div>
       </div>

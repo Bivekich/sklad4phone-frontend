@@ -24,7 +24,7 @@ const User = ({ admin, balance, first_name, id, phone_number, raiting }) => {
           </div>
           <div className="info_col">
             <h4>Баланс:</h4>
-            <span>{balance}₽</span>
+            <span>{balance}$</span>
           </div>
           <div className="info_col">
             <h4>Рейтинг:</h4>

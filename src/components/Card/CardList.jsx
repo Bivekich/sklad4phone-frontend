@@ -37,7 +37,7 @@ const CardList = ({ user }) => {
             key={index}
             admin={user.admin}
             id={item.id}
-            image={item.image}
+            images={item.images}
             name={item.name}
             description={item.description}
             price={item.price}

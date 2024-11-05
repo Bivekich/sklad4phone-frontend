@@ -9,6 +9,7 @@ import History from "./pages/History";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { getUserByPhoneNumber, phoneNumber } from "./server";
 import Users from "./pages/Users";
+import UserBooking from "./pages/UsersBooking";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,7 +46,10 @@ function App() {
           <Route path="/history" element={<History />} />
           {user &&
             user.admin && ( // Check if user is defined before accessing admin
-              <Route path="/users" element={<Users />} />
+              <>
+                <Route path="/users" element={<Users />} />
+                <Route path="/users-booking" element={<UserBooking />} />
+              </>
             )}
         </Route>
       </Routes>

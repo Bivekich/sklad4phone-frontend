@@ -11,31 +11,34 @@ const CreateCard = ({ isOpen, onClose }) => {
     collected_now: 0,
     collected_need: 0,
   });
-  const [image, setImage] = useState(null); // For the uploaded image file
-  const [preview, setPreview] = useState(""); // For previewing the image
+  const [images, setImages] = useState([]); // Array for multiple images
+  const [previews, setPreviews] = useState([]); // Array for image previews
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setNewProduct((prev) => ({
       ...prev,
       [name]:
-        name === "price" ||
-        name === "collected_now" ||
-        name === "collected_need"
+        (name === "price" ||
+          name === "collected_now" ||
+          name === "collected_need") &&
+        value !== ""
           ? Number(value)
           : value,
     }));
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    setPreview(URL.createObjectURL(file)); // Generate a preview URL for the image
+    const files = Array.from(e.target.files); // Convert FileList to Array
+    setImages(files);
+
+    // Generate previews for each image
+    const filePreviews = files.map((file) => URL.createObjectURL(file));
+    setPreviews(filePreviews);
   };
 
   const handleSave = async () => {
-    // Validate fields
-    if (!newProduct.name || !newProduct.description || !image) {
+    if (!newProduct.name || !newProduct.description || images.length === 0) {
       alert("Пожалуйста, заполните все обязательные поля и загрузите фото.");
       return;
     }
@@ -54,13 +57,16 @@ const CreateCard = ({ isOpen, onClose }) => {
     formData.append("price", newProduct.price);
     formData.append("collected_now", newProduct.collected_now);
     formData.append("collected_need", newProduct.collected_need);
-    formData.append("image", image); // Append the image file to the form data
+
+    images.forEach((image, index) => {
+      formData.append("images", image); // "images" should match the backend field name
+    });
 
     try {
-      await createSale(formData); // Pass FormData directly to the API call
-      alert("Сбор успешно создан!"); // Success message
-      onClose(); // Close the modal after saving
-      window.location.reload(); // Refresh page to show the new product (optional)
+      await createSale(formData);
+      alert("Сбор успешно создан!");
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.error("Ошибка при создании нового сбора:", error);
       alert(
@@ -125,14 +131,22 @@ const CreateCard = ({ isOpen, onClose }) => {
           </label>
           <label className="editCardLabel">
             Фото:
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {preview && (
-              <img
-                src={preview}
-                alt="Предварительный просмотр"
-                className="image-preview"
-              />
-            )}
+            <input
+              type="file"
+              accept="image/*"
+              multiple // Allow multiple file selection
+              onChange={handleImageChange}
+            />
+            <div className="image-previews">
+              {previews.map((preview, index) => (
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`Предварительный просмотр ${index + 1}`}
+                  className="image-preview"
+                />
+              ))}
+            </div>
           </label>
         </div>
         <div className="two_buttons">

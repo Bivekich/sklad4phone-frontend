@@ -188,3 +188,22 @@
     border-radius: 4px;
     font-size: 16px;
 }
+
+.image-carousel {
+    width: 100%;
+}
+
+.carousel-image img {
+    width: 100%;
+    height: auto;
+}
+
+.modal-overlay .image-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-overlay .image-slider * {
+    margin: 0;
+}
