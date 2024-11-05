@@ -1,4 +1,7 @@
 import axios from "axios";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const baseURL =
   window.location.hostname === "localhost"
@@ -10,7 +13,7 @@ const axiosInstance = axios.create({
   timeout: 10000, // Set timeout to 10 seconds
 });
 
-export const phoneNumber = "+79521514787";
+export const phoneNumber = cookies.get("phoneNumber");
 
 const handleAxiosError = (error) => {
   if (error.response) {

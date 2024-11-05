@@ -85,6 +85,7 @@ const UserModal = ({ isOpen, onClose, user }) => {
               <span className="greenyellow_color">
                 {(parseFloat(editedUser.raiting) || 0).toFixed(1)} / 10.0{" "}
               </span>
+
               <button onClick={increaseRating}>+</button>
             </div>
           ) : (
