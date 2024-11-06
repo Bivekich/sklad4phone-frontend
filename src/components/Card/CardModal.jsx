@@ -6,6 +6,8 @@ import {
   deleteSale,
   updateSale,
   createTransaction,
+  createBybitTransaction,
+  verifyBybitTransaction,
 } from "../../server";
 
 const CardModal = ({ isOpen, onClose, admin, product }) => {
@@ -14,6 +16,7 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
   const [editMode, setEditMode] = useState(false); // State to track edit mode
   const [editedProduct, setEditedProduct] = useState(product); // State for edited product data
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for image slider
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     setStep(0);
@@ -34,9 +37,30 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handlePay = () => {
-    createTransaction(product.price * selectedAmount, product.id);
+  const handlePay = async () => {
+    await createTransaction(product.price * selectedAmount, product.id);
     setStep(3);
+  };
+
+  const handleConfirmPayment = async () => {
+    const response = await verifyBybitTransaction(product.id);
+    if (response) {
+      alert("Покупка успешно подтверждена");
+    } else {
+      alert("Процесс перевода средств ещё не окончился");
+    }
+  };
+
+  const totalSumm = () => {
+    // product.price * selectedAmount add .12 or other small part
+    const baseAmount = product.price * selectedAmount;
+
+    const randomFraction = Math.random();
+
+    // Add the random fractional part to the total
+    const finalTotal = baseAmount + randomFraction;
+
+    return finalTotal.toFixed(2);
   };
 
   const handleDelete = async () => {
@@ -71,6 +95,18 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     const response = await buyForSale(product.id, selectedAmount);
     window.location.reload();
     console.log(response);
+  };
+
+  const handleUsdtPayment = async () => {
+    try {
+      // Adjust this function to interact with the backend for USDT payments
+      setTotal(totalSumm());
+      await createBybitTransaction(total, product.id);
+      setStep(4);
+    } catch (error) {
+      console.error("Ошибка при оплате USDT:", error);
+      alert("Ошибка при оплате USDT. Пожалуйста, попробуйте снова.");
+    }
   };
 
   // Handle changes in the edit mode
@@ -271,6 +307,9 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <div className="two_buttons">
             <button onClick={handlePay}>Оплатить через менеджера</button>
           </div>
+          <div className="two_buttons">
+            <button onClick={handleUsdtPayment}>Оплатить с USDT</button>
+          </div>
         </div>
       </div>
     );
@@ -290,6 +329,23 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     );
   }
 
+  if (step === 4) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="close-button" onClick={onClose}>
+            &#215;
+          </button>
+          <h2>Переведите на данный счет {total}: </h2>
+          <p>TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
+
+          <div className="two_buttons">
+            <button onClick={handleConfirmPayment}>Я отправил платеж</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return null;
 };
 

@@ -25,17 +25,19 @@ const handleAxiosError = (error) => {
   }
 };
 
-export const getUserByPhoneNumber = async (phoneNumber) => {
+export const getUserByPhoneNumber = async (
+  phoneNumber = cookies.get("phoneNumber"),
+) => {
   try {
     const response = await axiosInstance.get(`/users/get`, {
-      params: { phoneNumber: phoneNumber }, // Pass phoneNumber as a query parameter
+      params: { phoneNumber }, // Pass phoneNumber as a query parameter
     });
 
     console.log("User data:", response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
-    throw error;
+    return null;
   }
 };
 
@@ -316,6 +318,36 @@ export const sendNotification = async (message) => {
     return response.data;
   } catch (error) {
     handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Create a transaction for a specific user
+export const createBybitTransaction = async (
+  additionalAmount,
+  saleId = null,
+) => {
+  try {
+    const response = await axiosInstance.post(`/bybit/${phoneNumber}/create`, {
+      additionalAmount,
+      saleId, // Include saleId in the payload
+    });
+    return response.data; // Returns the created transaction details
+  } catch (error) {
+    console.error("Error creating transaction:", error);
+    throw error;
+  }
+};
+
+// Verify a transaction for a specific user
+export const verifyBybitTransaction = async (saleId = null) => {
+  try {
+    const response = await axiosInstance.get(`/bybit/${phoneNumber}/verify`, {
+      params: { saleId }, // Pass saleId as a query parameter
+    });
+    return response.data; // Returns verification result and balance
+  } catch (error) {
+    console.error("Error verifying transaction:", error);
     throw error;
   }
 };

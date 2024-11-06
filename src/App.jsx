@@ -6,36 +6,23 @@ import Home from "./pages/Home";
 import Account from "./pages/Account";
 import Support from "./pages/Support";
 import History from "./pages/History";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { getUserByPhoneNumber } from "./server";
 import Users from "./pages/Users";
 import UserBooking from "./pages/UsersBooking";
-import Cookies from "universal-cookie";
 
 function App() {
-  const cookies = new Cookies();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve phone number from URL parameters and store it in cookies
-    const urlParams = new URLSearchParams(window.location.search);
-    const phoneNumber = urlParams.get("phoneNumber");
-
-    if (phoneNumber) {
-      cookies.set("phoneNumber", phoneNumber, { path: "/" });
-      navigate("/", { replace: true }); // Clean URL by removing query parameter
-    }
-
     const fetchUser = async () => {
       try {
-        const phone = cookies.get("phoneNumber");
-        if (phone) {
-          const fetchedUser = await getUserByPhoneNumber(phone);
-          console.log("Fetched user data:", fetchedUser);
-          setUser(fetchedUser);
-        }
+        const fetchedUser = await getUserByPhoneNumber();
+        console.log("Fetched user data:", fetchedUser);
+
+        // setUser(fetchedUser);
+        setUser(fetchedUser ? fetchedUser : { admin: false });
       } catch (error) {
         console.error("Error fetching user:", error);
       } finally {
@@ -45,7 +32,6 @@ function App() {
 
     fetchUser();
   }, []);
-
   if (loading) {
     return <div>Loading...</div>;
   }
