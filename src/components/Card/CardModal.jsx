@@ -92,7 +92,10 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
   };
 
   const handleBuyFromBalance = async () => {
-    const response = await buyForSale(product.id, selectedAmount);
+    const response = await buyForSale(
+      product.id,
+      product.price * selectedAmount,
+    );
     window.location.reload();
     console.log(response);
   };
@@ -299,7 +302,9 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             &#215;
           </button>
           <p>Выберите способ оплаты</p>
-          <h2>10% от суммы заказа</h2>
+          <h2>
+            10% от суммы заказа: <br />${product.price * selectedAmount}
+          </h2>
 
           <div className="two_buttons">
             <button onClick={handleBuyFromBalance}>Оплатить с баланса</button>
@@ -322,7 +327,9 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <p>Свяжитесь с менеджером для оплаты</p>
+          <p>
+            Свяжитесь с менеджером для оплаты ${product.price * selectedAmount}
+          </p>
           <h2>В телеграм: VladimirEHoffman</h2>
         </div>
       </div>
@@ -337,7 +344,8 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             &#215;
           </button>
           <h2>Переведите на данный счет {total}: </h2>
-          <p>TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
+          <p>Сеть: TRC20 (Tron)</p>
+          <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
 
           <div className="two_buttons">
             <button onClick={handleConfirmPayment}>Я отправил платеж</button>

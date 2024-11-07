@@ -86,8 +86,9 @@ const BalanceModal = ({ onClose }) => {
             &#215;
           </button>
           <h2>Выберите способ пополнения</h2>
+          <p>На сумму: ${amount}</p>
           <div className="two_buttons">
-            <button onClick={handlePay}>Пополнить с баланса</button>
+            <button onClick={handlePay}>Наличными</button>
           </div>
           <div className="two_buttons">
             <button onClick={handleUsdtPayment}>Оплатить с USDT</button>
@@ -123,8 +124,10 @@ const BalanceModal = ({ onClose }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <h2>Переведите на данный счет {total} USDT:</h2>
-          <p>TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
+          <h2>Переведите на данный счет {total}: </h2>
+          <p>Сеть: TRC20 (Tron)</p>
+          <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
+
           <div className="two_buttons">
             <button onClick={handleConfirmPayment}>Я отправил платеж</button>
           </div>
