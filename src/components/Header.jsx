@@ -15,6 +15,10 @@ const Header = ({ user }) => {
     setIsBalanceModalOpen(!isBalanceModalOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <>
       <header>
@@ -30,7 +34,7 @@ const Header = ({ user }) => {
 
       {/* Sidebar Menu */}
       <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-        <button className="close-button" onClick={toggleMenu}>
+        <button className="close-button" onClick={closeMenu}>
           &#215;
         </button>
         <nav>
@@ -43,52 +47,52 @@ const Header = ({ user }) => {
           </div>
           <div className="hr"></div>
           <ul>
-            <li>
+            <li onClick={closeMenu}>
               <img src="home.svg" alt="home" />
               <Link to="/">Главная</Link>
             </li>
             {user.admin ? (
               <>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="person.svg" alt="person" />
                   <Link to="/users">Пользователи</Link>
                 </li>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="book.svg" alt="book" />
                   <Link to="/users-booking">Бронь пользователей</Link>
                 </li>
               </>
             ) : (
               <>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="person.svg" alt="person" />
                   <Link to="/account">Мой аккаунт</Link>
                 </li>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="history.svg" alt="history" />
                   <Link to="/history">История сборов</Link>
                 </li>
               </>
             )}
-            <li>
+            <li onClick={closeMenu}>
               <img src="bell.svg" alt="bell" />
               <Link to="#services">Уведомления</Link>
             </li>
-            <li>
+            <li onClick={closeMenu}>
               <img src="headphones.svg" alt="headphones" />
               <Link to="/support">Техподдержка</Link>
             </li>
             {!user.admin && (
               <>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="contract.svg" alt="contract" />
                   <Link to="#services">Договор оферты</Link>
                 </li>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="document.svg" alt="document" />
                   <Link to="#services">Правила сервиса</Link>
                 </li>
-                <li>
+                <li onClick={closeMenu}>
                   <img src="checkmark.svg" alt="checkmark" />
                   <Link to="#services">Гарантии</Link>
                 </li>
@@ -99,7 +103,7 @@ const Header = ({ user }) => {
       </div>
 
       {/* Overlay to close menu when clicked outside */}
-      {isMenuOpen && <div className="overlay" onClick={toggleMenu}></div>}
+      {isMenuOpen && <div className="overlay" onClick={closeMenu}></div>}
 
       {/* Balance Modal */}
       {isBalanceModalOpen && (

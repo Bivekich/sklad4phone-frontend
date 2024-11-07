@@ -24,6 +24,7 @@ const Account = ({ user }) => {
 
       console.log("User updated successfully");
       alert("Профиль успешно обновлен");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating user:", error);
     }
@@ -36,7 +37,7 @@ const Account = ({ user }) => {
       <span className="raiting">
         Рейтинг: {(parseFloat(user.raiting) || 0).toFixed(1)}/10.0
       </span>
-      <div className="balance">Баланс: {user.balance}Р</div>
+      <div className="balance">Баланс: ${user.balance}</div>
 
       {/* Editable fields */}
       <div className="input_rounded_row">
