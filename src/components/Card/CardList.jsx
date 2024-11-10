@@ -34,6 +34,7 @@ const CardList = ({ user }) => {
         </h3>
         {cards.map((item, index) => (
           <Card
+            user={user}
             key={index}
             admin={user.admin}
             id={item.id}

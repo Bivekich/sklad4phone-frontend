@@ -8,20 +8,31 @@ import {
   createTransaction,
   createBybitTransaction,
   verifyBybitTransaction,
+  getCource,
 } from "../../server";
 
-const CardModal = ({ isOpen, onClose, admin, product }) => {
+const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [selectedAmount, setSelectedAmount] = useState(1);
   const [step, setStep] = useState(0);
-  const [editMode, setEditMode] = useState(false); // State to track edit mode
-  const [editedProduct, setEditedProduct] = useState(product); // State for edited product data
-  const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for image slider
+  const [editMode, setEditMode] = useState(false);
+  const [editedProduct, setEditedProduct] = useState(product);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [total, setTotal] = useState(0);
+  const [course, setCourse] = useState(0);
 
   useEffect(() => {
     setStep(0);
-    setEditedProduct(product); // Reset edited product when modal opens
+    setEditedProduct(product);
   }, [isOpen, product]);
+
+  useEffect(() => {
+    const fetchCource = async () => {
+      const course_result = await getCource();
+      setCourse(Number(course_result));
+    };
+
+    fetchCource();
+  }, []);
 
   if (!isOpen) return null;
 
@@ -52,14 +63,9 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
   };
 
   const totalSumm = () => {
-    // product.price * selectedAmount add .12 or other small part
-    const baseAmount = product.price * selectedAmount;
-
+    const baseAmount = product.price * selectedAmount * 0.1;
     const randomFraction = Math.random();
-
-    // Add the random fractional part to the total
     const finalTotal = baseAmount + randomFraction;
-
     return finalTotal.toFixed(2);
   };
 
@@ -72,19 +78,18 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
   const handleSave = async () => {
     if (editedProduct.price < product.price) {
       alert("Цена не может быть ниже текущей стоимости.");
-      return; // Prevent saving if price is below the current product price
+      return;
     }
 
     if (editedProduct.collected_now < product.collected_now) {
       alert("Нельзя уменьшить значение 'Собрано сейчас'.");
-      return; // Prevent saving if collected_now is decreased
+      return;
     }
 
     try {
-      // Attempt to save the edited product data
       const result = await updateSale(product.id, editedProduct);
       setEditedProduct(result);
-      setEditMode(false); // Exit edit mode upon successful save
+      setEditMode(false);
     } catch (error) {
       console.error("Ошибка при сохранении изменений:", error);
       alert("Произошла ошибка при сохранении. Пожалуйста, попробуйте снова.");
@@ -102,7 +107,6 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
 
   const handleUsdtPayment = async () => {
     try {
-      // Adjust this function to interact with the backend for USDT payments
       setTotal(totalSumm());
       await createBybitTransaction(total, product.id);
       setStep(4);
@@ -112,12 +116,11 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     }
   };
 
-  // Handle changes in the edit mode
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({ ...prev, [name]: value }));
   };
-  // Image slider navigation
+
   const nextImage = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex < product.images.length - 1 ? prevIndex + 1 : 0,
@@ -130,7 +133,6 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
     );
   };
 
-  // Step 0: Show product details and the slider
   if (step === 0 && !editMode) {
     return (
       <div className="modal-overlay">
@@ -138,17 +140,25 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          {/* Image Slider */}
-          <div className="image-slider">
-            <img
-              src={product.images[currentImageIndex]}
-              alt={editedProduct.name}
-            />
-            <div className="two_buttons">
-              <button onClick={prevImage}>&#10094;</button>
-              <button onClick={nextImage}>&#10095;</button>
+
+          {/* Video Display */}
+          {product.videoUrl ? (
+            <div className="video-container">
+              <video controls src={product.videoUrl} />
             </div>
-          </div>
+          ) : (
+            <div className="image-slider">
+              <img
+                src={product.images[currentImageIndex]}
+                alt={editedProduct.name}
+              />
+              <div className="two_buttons">
+                <button onClick={prevImage}>&#10094;</button>
+                <button onClick={nextImage}>&#10095;</button>
+              </div>
+            </div>
+          )}
+
           <h2>{editedProduct.name}</h2>
           <p>{editedProduct.description}</p>
           <div className="modal-progress">
@@ -158,7 +168,6 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             </span>
           </div>
 
-          {/* Slider for selecting amount */}
           <div className="slider-container">
             <input
               type="range"
@@ -170,9 +179,19 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             />
             <div className="slider-value">Количество: {selectedAmount} шт</div>
           </div>
-
           <div className="modal-price">
-            Сумма: {product.price * selectedAmount}$
+            Сейчас на счету: ${user.balance} (
+            {(Number(user.balance) / course).toFixed(2)}P)
+          </div>
+          <div className="modal-price">
+            Сумма: ${product.price * selectedAmount} (
+            {(Number(product.price * selectedAmount) / course).toFixed(2)}P)
+          </div>
+          <div className="modal-price">
+            Предоплата за бронь 10% от суммы заказа: <br />$
+            {product.price * selectedAmount * 0.1}(
+            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
+            P)
           </div>
           {admin ? (
             <>
@@ -303,7 +322,9 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           </button>
           <p>Выберите способ оплаты</p>
           <h2>
-            10% от суммы заказа: <br />${product.price * selectedAmount}
+            10% от суммы заказа: <br />${product.price * selectedAmount * 0.1}(
+            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
+            P)
           </h2>
 
           <div className="two_buttons">
@@ -328,7 +349,10 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
             &#215;
           </button>
           <p>
-            Свяжитесь с менеджером для оплаты ${product.price * selectedAmount}
+            Свяжитесь с менеджером для оплаты $
+            {product.price * selectedAmount * 0.1} (
+            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
+            P)
           </p>
           <h2>В телеграм: VladimirEHoffman</h2>
         </div>
@@ -343,10 +367,14 @@ const CardModal = ({ isOpen, onClose, admin, product }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <h2>Переведите на данный счет {total}: </h2>
+          <h2>
+            Переведите на данный счет {total} (
+            {(Number(total) / course).toFixed(2)}
+            P):{" "}
+          </h2>
           <p>Сеть: TRC20 (Tron)</p>
           <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
-
+          <img src="qr.jpg" alt="" />
           <div className="two_buttons">
             <button onClick={handleConfirmPayment}>Я отправил платеж</button>
           </div>
@@ -368,6 +396,7 @@ CardModal.propTypes = {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    videoUrl: PropTypes.string, // Optional video URL
     collected_need: PropTypes.number.isRequired,
     collected_now: PropTypes.number.isRequired,
   }).isRequired,

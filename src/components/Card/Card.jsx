@@ -4,6 +4,7 @@ import CardModal from "./CardModal"; // Import the CardModal
 import "../../styles/Card.css";
 
 const Card = ({
+  user,
   admin,
   id,
   images, // Accept images as an array
@@ -66,6 +67,7 @@ const Card = ({
 
       {/* Render the CardModal */}
       <CardModal
+        user={user}
         isOpen={isModalOpen}
         onClose={handleClose}
         admin={admin}

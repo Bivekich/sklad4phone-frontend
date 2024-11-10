@@ -207,3 +207,8 @@
 .modal-overlay .image-slider * {
     margin: 0;
 }
+.modal-overlay .image-slider img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+}

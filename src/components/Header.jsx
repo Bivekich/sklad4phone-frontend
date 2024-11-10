@@ -76,7 +76,15 @@ const Header = ({ user }) => {
             )}
             <li onClick={closeMenu}>
               <img src="bell.svg" alt="bell" />
-              <Link to="#services">Уведомления</Link>
+              <Link
+                to={
+                  user.admin
+                    ? "/notifications"
+                    : "https://t.me/Sklad4Phones_bot"
+                }
+              >
+                Уведомления
+              </Link>
             </li>
             <li onClick={closeMenu}>
               <img src="headphones.svg" alt="headphones" />
@@ -108,7 +116,7 @@ const Header = ({ user }) => {
       {/* Balance Modal */}
       {isBalanceModalOpen && (
         <>
-          <BalanceModal onClose={toggleBalanceModal} />
+          <BalanceModal user={user} onClose={toggleBalanceModal} />
           <div className="overlay" onClick={toggleBalanceModal}></div>
         </>
       )}

@@ -1,16 +1,27 @@
 // BalanceModal.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Modal.css";
 import {
   createTransaction,
   createBybitTransaction,
   verifyBybitTransaction,
+  getCource,
 } from "../server";
 
-const BalanceModal = ({ onClose }) => {
+const BalanceModal = ({ user, onClose }) => {
   const [amount, setAmount] = useState("");
   const [step, setStep] = useState(0);
   const [total, setTotal] = useState(0);
+  const [course, setCourse] = useState(0);
+
+  useEffect(() => {
+    const fetchCource = async () => {
+      const course_result = await getCource();
+      setCourse(Number(course_result));
+    };
+
+    fetchCource();
+  }, []);
 
   const handleRecharge = () => {
     setStep(1);
@@ -31,8 +42,13 @@ const BalanceModal = ({ onClose }) => {
 
   const handleUsdtPayment = async () => {
     try {
-      const totalAmount = parseFloat(amount) * 1.1; // Adding a small fee
-      setTotal(totalAmount.toFixed(2)); // Show total with the fee
+      const totalAmount = parseFloat(amount); // Adding a small fee
+      const randomFraction = Math.random();
+
+      // Add the random fractional part to the total
+      const finalTotal = totalAmount + randomFraction;
+
+      setTotal(finalTotal.toFixed(2)); // Show total with the fee
       await createBybitTransaction(total); // Proceed with the USDT transaction
       setStep(4); // Move to the confirmation step
     } catch (error) {
@@ -59,8 +75,12 @@ const BalanceModal = ({ onClose }) => {
             &#215;
           </button>
           <h2>Пополнить баланс</h2>
+          <h2>
+            Сейчас на счету: ${user.balance} (
+            {(Number(user.balance) / course).toFixed(2)}P){" "}
+          </h2>
           <div className="input_rounded_row">
-            <span>Сумма:</span>
+            <span>Сумма в $:</span>
             <input
               type="number"
               value={amount}
@@ -86,7 +106,9 @@ const BalanceModal = ({ onClose }) => {
             &#215;
           </button>
           <h2>Выберите способ пополнения</h2>
-          <p>На сумму: ${amount}</p>
+          <p>
+            На сумму: ${amount} ({(Number(amount) / course).toFixed(2)}P)
+          </p>
           <div className="two_buttons">
             <button onClick={handlePay}>Наличными</button>
           </div>
@@ -107,7 +129,10 @@ const BalanceModal = ({ onClose }) => {
             &#215;
           </button>
           <h2>Пополнение баланса успешно</h2>
-          <p>Ваш баланс был пополнен на сумму {amount}.</p>
+          <p>
+            Ваш баланс был пополнен на сумму {amount} (
+            {(Number(amount) / course).toFixed(2)}P).
+          </p>
           <div className="two_buttons">
             <button onClick={onClose}>Закрыть</button>
           </div>
@@ -124,9 +149,13 @@ const BalanceModal = ({ onClose }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <h2>Переведите на данный счет {total}: </h2>
+          <h2>
+            Переведите на данный счет ${total} (
+            {(Number(amount) / course).toFixed(2)}P):{" "}
+          </h2>
           <p>Сеть: TRC20 (Tron)</p>
           <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
+          <img src="qr.jpg" alt="" />
 
           <div className="two_buttons">
             <button onClick={handleConfirmPayment}>Я отправил платеж</button>

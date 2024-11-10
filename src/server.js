@@ -348,3 +348,57 @@ export const verifyBybitTransaction = async (saleId = null) => {
     throw error;
   }
 };
+
+export const getCource = async () => {
+  try {
+    const response = await fetch("https://www.cbr-xml-daily.ru/latest.js");
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const usdRate = data.rates.USD;
+
+    console.log(`RUB to USD exchange rate: ${usdRate}`);
+
+    return usdRate;
+  } catch (error) {
+    console.error("Failed to get exchange rate:", error);
+  }
+};
+
+export const broadcastNotification = async (formData) => {
+  try {
+    // Optional: Check if formData contains message and files before sending
+    if (!formData.get("message")) {
+      alert("Сообщение не может быть пустым!");
+      return;
+    }
+    // Send POST request to backend `/broadcast` endpoint
+    const response = await axiosInstance.post(
+      "/notifications/broadcast",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure it's multipart/form-data
+        },
+      },
+    );
+
+    console.log("Broadcast sent successfully:", response.data);
+    // alert("Сообщение успешно отправлено!");
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error("Server responded with error:", error.response.data);
+      alert(
+        "Ошибка при отправке сообщения: " + error.response.data.message ||
+          "Неизвестная ошибка.",
+      );
+    } else {
+      console.error("Error sending broadcast notification:", error.message);
+      alert("Ошибка при отправке сообщения.");
+    }
+    throw error;
+  }
+};

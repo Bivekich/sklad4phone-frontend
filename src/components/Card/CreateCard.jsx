@@ -11,8 +11,10 @@ const CreateCard = ({ isOpen, onClose }) => {
     collected_now: 0,
     collected_need: 0,
   });
-  const [images, setImages] = useState([]); // Array for multiple images
-  const [previews, setPreviews] = useState([]); // Array for image previews
+  const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
+  const [video, setVideo] = useState(null); // Single video file
+  const [videoPreview, setVideoPreview] = useState(null); // Video preview
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,12 +31,17 @@ const CreateCard = ({ isOpen, onClose }) => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to Array
+    const files = Array.from(e.target.files);
     setImages(files);
 
-    // Generate previews for each image
     const filePreviews = files.map((file) => URL.createObjectURL(file));
     setPreviews(filePreviews);
+  };
+
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+    setVideo(file);
+    setVideoPreview(URL.createObjectURL(file));
   };
 
   const handleSave = async () => {
@@ -58,9 +65,13 @@ const CreateCard = ({ isOpen, onClose }) => {
     formData.append("collected_now", newProduct.collected_now);
     formData.append("collected_need", newProduct.collected_need);
 
-    images.forEach((image, index) => {
-      formData.append("images", image); // "images" should match the backend field name
+    images.forEach((image) => {
+      formData.append("images", image);
     });
+
+    if (video) {
+      formData.append("video", video); // Append video file to FormData
+    }
 
     try {
       await createSale(formData);
@@ -134,7 +145,7 @@ const CreateCard = ({ isOpen, onClose }) => {
             <input
               type="file"
               accept="image/*"
-              multiple // Allow multiple file selection
+              multiple
               onChange={handleImageChange}
             />
             <div className="image-previews">
@@ -147,6 +158,18 @@ const CreateCard = ({ isOpen, onClose }) => {
                 />
               ))}
             </div>
+          </label>
+          <label className="editCardLabel">
+            Видео:
+            <input type="file" accept="video/*" onChange={handleVideoChange} />
+            {videoPreview && (
+              <video
+                src={videoPreview}
+                controls
+                className="video-preview"
+                width="100%"
+              />
+            )}
           </label>
         </div>
         <div className="two_buttons">

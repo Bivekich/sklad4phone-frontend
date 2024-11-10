@@ -1,15 +1,16 @@
 // App.jsx
 import "./App.css";
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { getUserByPhoneNumber } from "./server";
 import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import Account from "./pages/Account";
 import Support from "./pages/Support";
 import History from "./pages/History";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { getUserByPhoneNumber } from "./server";
 import Users from "./pages/Users";
 import UserBooking from "./pages/UsersBooking";
+import Notifications from "./pages/Notifications";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -46,6 +47,7 @@ function App() {
           <Route path="/history" element={<History />} />
           {user && user.admin && (
             <>
+              <Route path="/notifications" element={<Notifications />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users-booking" element={<UserBooking />} />
             </>
