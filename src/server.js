@@ -10,7 +10,8 @@ const axiosInstance = axios.create({
   timeout: 10000, // Set timeout to 10 seconds
 });
 
-export const phoneNumber = localStorage.getItem("phoneNumber");
+const urlParams = new URLSearchParams(window.location.search);
+export const phoneNumberConst = urlParams.get("phoneNumber");
 
 const handleAxiosError = (error) => {
   if (error.response) {
@@ -22,9 +23,7 @@ const handleAxiosError = (error) => {
   }
 };
 
-export const getUserByPhoneNumber = async (
-  phoneNumber = localStorage.getItem("phoneNumber"),
-) => {
+export const getUserByPhoneNumber = async (phoneNumber = phoneNumberConst) => {
   try {
     const response = await axiosInstance.get(`/users/get`, {
       params: { phoneNumber }, // Pass phoneNumber as a query parameter
@@ -133,7 +132,7 @@ export const buyForSale = async (id, quantity) => {
   try {
     const response = await axiosInstance.post(`/sales/${id}/buy`, {
       quantity,
-      phoneNumber,
+      phoneNumber: phoneNumberConst,
     });
     console.log("Sale purchased:", response.data);
     return response.data;
@@ -149,7 +148,7 @@ export const buyForSale = async (id, quantity) => {
   }
 };
 
-export const getUserOrders = async (phone = phoneNumber) => {
+export const getUserOrders = async (phone = phoneNumberConst) => {
   try {
     const response = await axiosInstance.get(`/sales/userorders/${phone}`);
     console.log("User orders retrieved:", response.data);
@@ -166,10 +165,10 @@ export const getUserOrders = async (phone = phoneNumber) => {
 // Function to create a new support ticket
 export const createSupportTicket = async (supportData) => {
   try {
-    const response = await axiosInstance.post("/support/create", supportData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await axiosInstance.post("/support", {
+      subject: supportData.subject,
+      message: supportData.message,
+      phoneNumber: phoneNumberConst,
     });
     console.log("Support ticket created:", response.data);
     return response.data;
@@ -182,7 +181,7 @@ export const createSupportTicket = async (supportData) => {
 // Function to get all support tickets
 export const getAllSupportTickets = async () => {
   try {
-    const response = await axiosInstance.get("/support/tickets");
+    const response = await axiosInstance.get("/support/");
     console.log("All support tickets:", response.data);
     return response.data;
   } catch (error) {
@@ -192,9 +191,9 @@ export const getAllSupportTickets = async () => {
 };
 
 // Function to get a support ticket by ID
-export const getSupportTicketById = async (id) => {
+export const getUserSupportTickets = async () => {
   try {
-    const response = await axiosInstance.get(`/support/tickets/${id}`);
+    const response = await axiosInstance.get(`/support/${phoneNumberConst}`);
     console.log("Support ticket data:", response.data);
     return response.data;
   } catch (error) {
@@ -275,7 +274,7 @@ export const getTransactionById = async (id) => {
 export const createTransaction = async (amount, saleId = null) => {
   try {
     const response = await axiosInstance.post("/transactions", {
-      phoneNumber,
+      phoneNumber: phoneNumberConst,
       amount,
       saleId,
     });
@@ -308,10 +307,10 @@ export const updateTransactionStatus = async (id, paid = false) => {
 export const sendNotification = async (message) => {
   try {
     const response = await axiosInstance.post("/notifications/send", {
-      phoneNumber,
+      phoneNumber: phoneNumberConst,
       message,
     });
-    console.log(`Notification sent to ${phoneNumber}:`, response.data);
+    console.log(`Notification sent to ${phoneNumberConst}:`, response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -325,10 +324,13 @@ export const createBybitTransaction = async (
   saleId = null,
 ) => {
   try {
-    const response = await axiosInstance.post(`/bybit/${phoneNumber}/create`, {
-      additionalAmount,
-      saleId, // Include saleId in the payload
-    });
+    const response = await axiosInstance.post(
+      `/bybit/${phoneNumberConst}/create`,
+      {
+        additionalAmount,
+        saleId, // Include saleId in the payload
+      },
+    );
     return response.data; // Returns the created transaction details
   } catch (error) {
     console.error("Error creating transaction:", error);

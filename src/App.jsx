@@ -43,7 +43,7 @@ function App() {
         <Route path="/" element={<Layout user={user} />}>
           <Route path="/" element={<Home user={user} />} />
           <Route path="/account" element={<Account user={user} />} />
-          <Route path="/support" element={<Support />} />
+          <Route path="/support" element={<Support user={user} />} />
           <Route path="/history" element={<History />} />
           {user && user.admin && (
             <>

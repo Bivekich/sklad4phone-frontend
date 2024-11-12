@@ -1,25 +1,29 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { phoneNumberConst } from "../server";
 
 const Layout = ({ user }) => {
-  const [phone, setPhone] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Retrieve phone number from URL parameters and store it in cookies
-    const urlParams = new URLSearchParams(window.location.search);
+    // Retrieve phone number from URL parameters
+    const urlParams = new URLSearchParams(location.search);
     const phoneNumber = urlParams.get("phoneNumber");
-    setPhone(phoneNumber);
-    if (phoneNumber && !localStorage.getItem("phoneNumber")) {
-      localStorage.setItem("phoneNumber", phoneNumber, { path: "/" });
-      // window.location.reload();
-      // navigate("/", { replace: true }); // Clean URL by removing query parameter
+
+    // If phone number is missing, add it to the URL
+    if (!phoneNumber) {
+      urlParams.set("phoneNumber", phoneNumberConst);
+      navigate(`${location.pathname}?${urlParams.toString()}`, {
+        replace: true,
+      });
     }
-  }, []);
+  }, [location, navigate]);
+
   return (
     <>
       <Header user={user} />
-      {/* {phone} */}
       <Outlet />
     </>
   );
