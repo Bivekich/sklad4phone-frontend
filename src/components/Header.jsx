@@ -90,22 +90,18 @@ const Header = ({ user }) => {
               <img src="headphones.svg" alt="headphones" />
               <Link to="/support">Техподдержка</Link>
             </li>
-            {!user.admin && (
-              <>
-                <li onClick={closeMenu}>
-                  <img src="contract.svg" alt="contract" />
-                  <Link to="#services">Договор оферты</Link>
-                </li>
-                <li onClick={closeMenu}>
-                  <img src="document.svg" alt="document" />
-                  <Link to="#services">Правила сервиса</Link>
-                </li>
-                <li onClick={closeMenu}>
-                  <img src="checkmark.svg" alt="checkmark" />
-                  <Link to="#services">Гарантии</Link>
-                </li>
-              </>
-            )}
+            <li onClick={closeMenu}>
+              <img src="contract.svg" alt="contract" />
+              <Link to="/agreement/offer">Договор оферты</Link>
+            </li>
+            <li onClick={closeMenu}>
+              <img src="document.svg" alt="document" />
+              <Link to="/agreement/service_rules">Правила сервиса</Link>
+            </li>
+            <li onClick={closeMenu}>
+              <img src="checkmark.svg" alt="checkmark" />
+              <Link to="/agreement/warranty">Гарантии</Link>
+            </li>
           </ul>
         </nav>
       </div>

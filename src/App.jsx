@@ -11,6 +11,7 @@ import History from "./pages/History";
 import Users from "./pages/Users";
 import UserBooking from "./pages/UsersBooking";
 import Notifications from "./pages/Notifications";
+import Agreement from "./pages/Agreement";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,6 +46,7 @@ function App() {
           <Route path="/account" element={<Account user={user} />} />
           <Route path="/support" element={<Support user={user} />} />
           <Route path="/history" element={<History />} />
+          <Route path="/agreement/:type" element={<Agreement user={user} />} />
           {user && user.admin && (
             <>
               <Route path="/notifications" element={<Notifications />} />

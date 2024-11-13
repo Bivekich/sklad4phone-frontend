@@ -72,7 +72,7 @@ Account.propTypes = {
     first_name: PropTypes.string.isRequired,
     phone_number: PropTypes.string.isRequired,
     balance: PropTypes.number.isRequired,
-    raiting: PropTypes.number.isRequired,
+    raiting: PropTypes.string.isRequired,
   }).isRequired,
 };
 

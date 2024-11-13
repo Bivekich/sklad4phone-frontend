@@ -354,7 +354,10 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
             P)
           </p>
-          <h2>В телеграм: VladimirEHoffman</h2>
+          <h2>
+            В телеграм:{" "}
+            <a href="https://t.me/manager_kazaka">@manager_kazaka</a>
+          </h2>
         </div>
       </div>
     );

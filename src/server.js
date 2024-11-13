@@ -404,3 +404,29 @@ export const broadcastNotification = async (formData) => {
     throw error;
   }
 };
+
+// Fetch an agreement by type (e.g., "offer", "service_rules", "warranty")
+export const getAgreementByType = async (type) => {
+  try {
+    const response = await axiosInstance.get(`/agreements/${type}`);
+    console.log(`Agreement data for type "${type}":`, response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+// Update an agreement text by type
+export const updateAgreementByType = async (type, newText) => {
+  try {
+    const response = await axiosInstance.put(`/agreements/${type}`, {
+      text: newText,
+    });
+    console.log(`Updated agreement for type "${type}":`, response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};

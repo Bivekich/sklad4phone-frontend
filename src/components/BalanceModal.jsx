@@ -128,14 +128,14 @@ const BalanceModal = ({ user, onClose }) => {
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
-          <h2>Пополнение баланса успешно</h2>
           <p>
-            Ваш баланс был пополнен на сумму {amount} (
-            {(Number(amount) / course).toFixed(2)}P).
+            Свяжитесь с менеджером для оплаты ${total} (
+            {(Number(amount) / course).toFixed(2)}P)
           </p>
-          <div className="two_buttons">
-            <button onClick={onClose}>Закрыть</button>
-          </div>
+          <h2>
+            В телеграм:{" "}
+            <a href="https://t.me/manager_kazaka">@manager_kazaka</a>
+          </h2>
         </div>
       </div>
     );
