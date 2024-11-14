@@ -64,7 +64,7 @@ const Agreement = ({ user }) => {
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             rows="10"
-            style={{ width: "100%" }}
+            style={{ width: "100%", padding: "1rem" }}
           />
           <br />
           <br />

@@ -69,14 +69,14 @@ export const createSale = async (saleData) => {
   try {
     const response = await axiosInstance.post("/sales/create", saleData, {
       headers: {
-        "Content-Type": "multipart/form-data", // Important for file uploads
+        "Content-Type": "multipart/form-data",
       },
     });
     console.log("Sale created:", response.data);
     return response.data;
   } catch (error) {
-    handleAxiosError(error); // Ensure this function is well defined to handle errors
-    throw error; // Rethrow the error for further handling if necessary
+    handleAxiosError(error);
+    throw error;
   }
 };
 
@@ -341,9 +341,12 @@ export const createBybitTransaction = async (
 // Verify a transaction for a specific user
 export const verifyBybitTransaction = async (saleId = null) => {
   try {
-    const response = await axiosInstance.get(`/bybit/${phoneNumber}/verify`, {
-      params: { saleId }, // Pass saleId as a query parameter
-    });
+    const response = await axiosInstance.get(
+      `/bybit/${phoneNumberConst}/verify`,
+      {
+        params: { saleId }, // Pass saleId as a query parameter
+      },
+    );
     return response.data; // Returns verification result and balance
   } catch (error) {
     console.error("Error verifying transaction:", error);

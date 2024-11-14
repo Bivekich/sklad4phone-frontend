@@ -22,6 +22,7 @@ const Card = ({
 
   const handleClose = () => {
     setIsModalOpen(false);
+    window.location.reload();
   };
 
   const progressPercentage = Math.min(

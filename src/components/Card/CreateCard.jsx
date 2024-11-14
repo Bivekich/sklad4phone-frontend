@@ -44,6 +44,19 @@ const CreateCard = ({ isOpen, onClose }) => {
     setVideoPreview(URL.createObjectURL(file));
   };
 
+  const handleRemoveImage = (index) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    const updatedPreviews = previews.filter((_, i) => i !== index);
+
+    setImages(updatedImages);
+    setPreviews(updatedPreviews);
+  };
+
+  const handleRemoveVideo = () => {
+    setVideo(null);
+    setVideoPreview(null);
+  };
+
   const handleSave = async () => {
     if (!newProduct.name || !newProduct.description || images.length === 0) {
       alert("Пожалуйста, заполните все обязательные поля и загрузите фото.");
@@ -66,11 +79,11 @@ const CreateCard = ({ isOpen, onClose }) => {
     formData.append("collected_need", newProduct.collected_need);
 
     images.forEach((image) => {
-      formData.append("images", image);
+      formData.append("files", image);
     });
 
     if (video) {
-      formData.append("video", video); // Append video file to FormData
+      formData.append("files", video);
     }
 
     try {
@@ -103,6 +116,7 @@ const CreateCard = ({ isOpen, onClose }) => {
               name="name"
               value={newProduct.name}
               onChange={handleChange}
+              required
             />
           </label>
           <label className="editCardLabel">
@@ -111,6 +125,7 @@ const CreateCard = ({ isOpen, onClose }) => {
               name="description"
               value={newProduct.description}
               onChange={handleChange}
+              required
             />
           </label>
           <label className="editCardLabel">
@@ -120,6 +135,7 @@ const CreateCard = ({ isOpen, onClose }) => {
               name="price"
               value={newProduct.price}
               onChange={handleChange}
+              required
             />
           </label>
           <label className="editCardLabel">
@@ -129,6 +145,7 @@ const CreateCard = ({ isOpen, onClose }) => {
               name="collected_now"
               value={newProduct.collected_now}
               onChange={handleChange}
+              required
             />
           </label>
           <label className="editCardLabel">
@@ -138,6 +155,7 @@ const CreateCard = ({ isOpen, onClose }) => {
               name="collected_need"
               value={newProduct.collected_need}
               onChange={handleChange}
+              required
             />
           </label>
           <label className="editCardLabel">
@@ -147,15 +165,23 @@ const CreateCard = ({ isOpen, onClose }) => {
               accept="image/*"
               multiple
               onChange={handleImageChange}
+              required
             />
             <div className="image-previews">
               {previews.map((preview, index) => (
-                <img
-                  key={index}
-                  src={preview}
-                  alt={`Предварительный просмотр ${index + 1}`}
-                  className="image-preview"
-                />
+                <div key={index} className="image-preview-container">
+                  <img
+                    src={preview}
+                    alt={`Предварительный просмотр ${index + 1}`}
+                    className="image-preview"
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(index)}
+                    className="delete-button"
+                  >
+                    Удалить
+                  </button>
+                </div>
               ))}
             </div>
           </label>
@@ -163,12 +189,17 @@ const CreateCard = ({ isOpen, onClose }) => {
             Видео:
             <input type="file" accept="video/*" onChange={handleVideoChange} />
             {videoPreview && (
-              <video
-                src={videoPreview}
-                controls
-                className="video-preview"
-                width="100%"
-              />
+              <div className="video-preview-container">
+                <video
+                  src={videoPreview}
+                  controls
+                  className="video-preview"
+                  width="100%"
+                />
+                <button onClick={handleRemoveVideo} className="delete-button">
+                  Удалить видео
+                </button>
+              </div>
             )}
           </label>
         </div>

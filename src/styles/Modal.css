@@ -212,3 +212,9 @@
     max-height: 300px;
     object-fit: cover;
 }
+
+.modal-overlay .image-previews {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

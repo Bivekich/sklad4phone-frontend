@@ -32,6 +32,12 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
     };
 
     fetchCource();
+
+    getCource().then((rate) => {
+      if (rate !== null) {
+        console.log(rate);
+      }
+    });
   }, []);
 
   if (!isOpen) return null;
@@ -142,22 +148,21 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           </button>
 
           {/* Video Display */}
-          {product.videoUrl ? (
+          {product.videoUrl && (
             <div className="video-container">
               <video controls src={product.videoUrl} />
             </div>
-          ) : (
-            <div className="image-slider">
-              <img
-                src={product.images[currentImageIndex]}
-                alt={editedProduct.name}
-              />
-              <div className="two_buttons">
-                <button onClick={prevImage}>&#10094;</button>
-                <button onClick={nextImage}>&#10095;</button>
-              </div>
-            </div>
           )}
+          <div className="image-slider">
+            <img
+              src={product.images[currentImageIndex]}
+              alt={editedProduct.name}
+            />
+            <div className="two_buttons">
+              <button onClick={prevImage}>&#10094;</button>
+              <button onClick={nextImage}>&#10095;</button>
+            </div>
+          </div>
 
           <h2>{editedProduct.name}</h2>
           <p>{editedProduct.description}</p>

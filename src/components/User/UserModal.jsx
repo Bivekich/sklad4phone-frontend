@@ -8,6 +8,7 @@ const UserModal = ({ isOpen, onClose, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [orders, setOrders] = useState([]);
   const [editedUser, setEditedUser] = useState({
+    id: user.id,
     first_name: user.first_name,
     phone_number: user.phone_number,
     balance: user.balance,

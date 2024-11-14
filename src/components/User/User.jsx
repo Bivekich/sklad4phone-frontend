@@ -12,6 +12,7 @@ const User = ({ admin, balance, first_name, id, phone_number, raiting }) => {
 
   const handleClose = () => {
     setIsModalOpen(false); // Close the modal
+    window.location.reload();
   };
 
   return (
