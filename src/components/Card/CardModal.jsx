@@ -32,12 +32,6 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
     };
 
     fetchCource();
-
-    getCource().then((rate) => {
-      if (rate !== null) {
-        console.log(rate);
-      }
-    });
   }, []);
 
   if (!isOpen) return null;
@@ -103,10 +97,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   };
 
   const handleBuyFromBalance = async () => {
-    const response = await buyForSale(
-      product.id,
-      product.price * selectedAmount,
-    );
+    const response = await buyForSale(product.id, selectedAmount);
     window.location.reload();
     console.log(response);
   };
