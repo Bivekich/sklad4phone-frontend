@@ -107,7 +107,8 @@ const BalanceModal = ({ user, onClose }) => {
           </button>
           <h2>Выберите способ пополнения</h2>
           <p>
-            На сумму: ${amount} ({(Number(amount) / course).toFixed(2)}P)
+            На сумму: ${Number(amount)} ({(Number(amount) / course).toFixed(2)}
+            P)
           </p>
           <div className="two_buttons">
             <button onClick={handlePay}>Наличными</button>
@@ -129,7 +130,7 @@ const BalanceModal = ({ user, onClose }) => {
             &#215;
           </button>
           <p>
-            Свяжитесь с менеджером для оплаты ${total} (
+            Свяжитесь с менеджером для оплаты ${amount} (
             {(Number(amount) / course).toFixed(2)}P)
           </p>
           <h2>
