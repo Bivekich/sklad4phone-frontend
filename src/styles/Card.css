@@ -9,6 +9,11 @@
     /* margin: 0.5rem; */
     gap: 0.5rem;
     background: transparent;
+    order: 1;
+}
+
+.card.completed {
+    order: 2;
 }
 
 .card .info,
@@ -48,6 +53,7 @@
     margin: auto;
     padding: 1rem;
     transform: rotate(90deg);
+    margin-right: 1rem;
 }
 
 .card .process_round span {

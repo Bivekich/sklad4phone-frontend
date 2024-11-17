@@ -41,7 +41,9 @@ const History = () => {
               image={order.image}
               title={order.name}
               price={order.price}
-              status={"Зарезервирован"}
+              collected_need={order.collected_need}
+              collected_now={order.collected_now}
+              cancel={order.cancel}
               date=""
             />
           ))}

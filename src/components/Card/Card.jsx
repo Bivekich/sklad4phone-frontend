@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import CardModal from "./CardModal"; // Import the CardModal
+import CardModal from "./CardModal";
 import "../../styles/Card.css";
-
+import { deleteSale } from "../../server";
 const Card = ({
   user,
   admin,
   id,
-  images, // Accept images as an array
+  images,
   name,
   description,
   price,
@@ -25,13 +25,20 @@ const Card = ({
     window.location.reload();
   };
 
+  const onDelete = async () => {
+    await deleteSale(id);
+  };
+
   const progressPercentage = Math.min(
     100,
     Math.floor((collected_now / collected_need) * 100),
   );
 
-  const color =
-    progressPercentage >= 70
+  const isCompleted = progressPercentage >= 100;
+
+  const color = isCompleted
+    ? "gray"
+    : progressPercentage >= 70
       ? "#BBFB4C"
       : progressPercentage >= 50
         ? "#E2FF31"
@@ -41,19 +48,32 @@ const Card = ({
 
   return (
     <>
-      <div className="card">
-        <img src={images[0]} alt={name} />{" "}
-        {/* Display the first image as preview */}
+      <div
+        className={`card ${isCompleted ? "completed" : ""}`}
+        style={{ order: isCompleted ? 10000 : collected_need - collected_now }}
+      >
+        <img src={images[0]} alt={name} />
         <div className="info">
           <div className="text_info">
             <h4>{name}</h4>
             <span>{description}</span>
           </div>
-          <button type="button" onClick={handleShow}>
-            {admin ? `Редактировать` : `Подробнее`}
-          </button>
+          {!isCompleted && (
+            <button type="button" onClick={handleShow}>
+              {admin ? `Редактировать` : `Подробнее`}
+            </button>
+          )}
+          {isCompleted && admin && (
+            <button
+              type="button"
+              className="delete-button"
+              onClick={() => onDelete(id)}
+            >
+              Удалить
+            </button>
+          )}
         </div>
-        <div className="price">{price}$</div>
+        <div className="price">${price}</div>
         <div
           className="process_round"
           style={{
@@ -66,7 +86,6 @@ const Card = ({
         </div>
       </div>
 
-      {/* Render the CardModal */}
       <CardModal
         user={user}
         isOpen={isModalOpen}
@@ -74,7 +93,7 @@ const Card = ({
         admin={admin}
         product={{
           id,
-          images, // Pass all images to the modal
+          images,
           name,
           description,
           price,
@@ -89,7 +108,7 @@ const Card = ({
 Card.propTypes = {
   admin: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
-  images: PropTypes.arrayOf(PropTypes.string).isRequired, // Ensure it's an array
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,

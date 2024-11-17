@@ -9,7 +9,10 @@ import {
   createBybitTransaction,
   verifyBybitTransaction,
   getCource,
+  calcelSale,
 } from "../../server";
+import BalanceModal from "../BalanceModal";
+import { Link } from "react-router-dom";
 
 const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [selectedAmount, setSelectedAmount] = useState(1);
@@ -19,6 +22,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [total, setTotal] = useState(0);
   const [course, setCourse] = useState(0);
+  const [isBalanceModalOpen, setIsBalanceModalOpen] = useState(false);
 
   useEffect(() => {
     setStep(0);
@@ -35,6 +39,10 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   }, []);
 
   if (!isOpen) return null;
+
+  const toggleBalanceModal = () => {
+    setIsBalanceModalOpen(!isBalanceModalOpen);
+  };
 
   const handleSliderChange = (event) => {
     setSelectedAmount(Number(event.target.value));
@@ -72,7 +80,13 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const handleDelete = async () => {
     await deleteSale(product.id);
     alert("Сбор успешно удален!");
+
     window.location.reload();
+  };
+
+  const handleCancel = async () => {
+    await calcelSale(product.id);
+    onClose();
   };
 
   const handleSave = async () => {
@@ -192,6 +206,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           {admin ? (
             <>
               <button onClick={() => setEditMode(true)}>Редактировать</button>
+              <button onClick={handleCancel}>Отменить сбор</button>
               <button onClick={handleDelete}>Удалить</button>
               <button onClick={onClose}>Готово</button>
             </>
@@ -297,7 +312,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           </button>
           <h2>Внимание</h2>
           <p>Изучите правила и условия</p>
-          <a href="">Правила и условия</a>
+          <Link to="/agreement/service_rules">Правила и условия</Link>
           <div className="two_buttons">
             <button className="second_button" onClick={handleBack}>
               Отмена
@@ -311,29 +326,41 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
   if (step === 2) {
     return (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <button className="close-button" onClick={onClose}>
-            &#215;
-          </button>
-          <p>Выберите способ оплаты</p>
-          <h2>
-            10% от суммы заказа: <br />${product.price * selectedAmount * 0.1}(
-            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
-            P)
-          </h2>
+      <>
+        {isBalanceModalOpen ? (
+          <>
+            <BalanceModal user={user} onClose={toggleBalanceModal} />
+          </>
+        ) : (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="close-button" onClick={onClose}>
+                &#215;
+              </button>
+              <p>Выберите способ оплаты</p>
+              <h2>
+                10% от суммы заказа: <br />$
+                {product.price * selectedAmount * 0.1}(
+                {(
+                  Number(product.price * selectedAmount * 0.1) / course
+                ).toFixed(2)}
+                P)
+              </h2>
 
-          <div className="two_buttons">
-            <button onClick={handleBuyFromBalance}>Оплатить с баланса</button>
+              {user.balance < Number(product.price * selectedAmount * 0.1) && (
+                <div className="two_buttons">
+                  <button onClick={handleBuyFromBalance}>
+                    Оплатить с баланса
+                  </button>
+                </div>
+              )}
+              <div className="two_buttons">
+                <button onClick={toggleBalanceModal}>Пополнить баланс</button>
+              </div>
+            </div>
           </div>
-          <div className="two_buttons">
-            <button onClick={handlePay}>Оплатить через менеджера</button>
-          </div>
-          <div className="two_buttons">
-            <button onClick={handleUsdtPayment}>Оплатить с USDT</button>
-          </div>
-        </div>
-      </div>
+        )}
+      </>
     );
   }
 

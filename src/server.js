@@ -134,6 +134,7 @@ export const buyForSale = async (id, quantity) => {
       quantity,
       phoneNumber: phoneNumberConst,
     });
+    alert("Сбор успешно оплачен!");
     console.log("Sale purchased:", response.data);
     return response.data;
   } catch (error) {
@@ -143,6 +144,17 @@ export const buyForSale = async (id, quantity) => {
         alert("У вас не достаточно средств на счёте.");
       }
     }
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+export const calcelSale = async (id) => {
+  try {
+    const response = await axiosInstance.post(`/sales/${id}/cancel`);
+    console.log("Sale calcelled:", response.data);
+    return response.data;
+  } catch (error) {
     handleAxiosError(error);
     throw error;
   }

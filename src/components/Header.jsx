@@ -57,10 +57,10 @@ const Header = ({ user }) => {
                   <img src="person.svg" alt="person" />
                   <Link to="/users">Пользователи</Link>
                 </li>
-                <li onClick={closeMenu}>
+                {/* <li onClick={closeMenu}>
                   <img src="book.svg" alt="book" />
                   <Link to="/users-booking">Бронь пользователей</Link>
-                </li>
+                </li> */}
               </>
             ) : (
               <>
