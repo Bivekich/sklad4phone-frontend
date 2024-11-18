@@ -3,16 +3,22 @@ import "../../styles/CardList.css";
 import Card from "./Card";
 import { getAllSales } from "../../server"; // Import the function to get sales
 import CreateCard from "./CreateCard";
+import { useLocation } from "react-router-dom";
 
 const CardList = ({ user }) => {
+  const location = useLocation();
   const [cards, setCards] = useState([]);
+  const [filteredCards, setFilteredCards] = useState([]);
   const [modal, setShowModal] = useState(false);
+  const urlParams = new URLSearchParams(location.search);
 
+  const search = urlParams.get("search");
   useEffect(() => {
     const fetchSales = async () => {
       try {
         const salesData = await getAllSales(); // Call the API to get all sales
         setCards(salesData); // Update state with the fetched data
+        setFilteredCards(salesData); // Initialize filtered cards
       } catch (error) {
         console.error("Error fetching sales data:", error);
       }
@@ -20,6 +26,16 @@ const CardList = ({ user }) => {
 
     fetchSales(); // Trigger the fetch function
   }, []);
+
+  useEffect(() => {
+    // Filter cards based on the search input
+    const results = cards.filter(
+      (card) =>
+        card.name.toLowerCase().includes(search.toLowerCase()) || // Filter by name
+        card.description.toLowerCase().includes(search.toLowerCase()), // Filter by description
+    );
+    setFilteredCards(results); // Update filtered cards
+  }, [search, cards]); // Re-run the filter whenever search or cards change
 
   return (
     <>
@@ -32,7 +48,7 @@ const CardList = ({ user }) => {
             </button>
           )}
         </h3>
-        {cards.map((item, index) => (
+        {filteredCards.map((item, index) => (
           <Card
             user={user}
             key={index}
