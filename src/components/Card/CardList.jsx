@@ -12,7 +12,7 @@ const CardList = ({ user }) => {
   const [modal, setShowModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
 
-  const search = urlParams.get("search");
+  const search = urlParams.get("search") || "";
   useEffect(() => {
     const fetchSales = async () => {
       try {
