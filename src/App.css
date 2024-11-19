@@ -71,3 +71,9 @@ button {
     color: #bbfb4c;
     padding: 0.1rem 1rem;
 }
+
+input,
+textarea {
+    color: #ffffff; /* Цвет текста */
+    background-color: #333333; /* Цвет фона */
+}

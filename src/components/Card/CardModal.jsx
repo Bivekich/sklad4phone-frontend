@@ -349,13 +349,13 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
               {user.balance < Number(product.price * selectedAmount * 0.1) && (
                 <div className="two_buttons">
-                  <button onClick={handleBuyFromBalance}>
-                    Оплатить с баланса
-                  </button>
+                  <button onClick={toggleBalanceModal}>Пополнить баланс</button>
                 </div>
               )}
               <div className="two_buttons">
-                <button onClick={toggleBalanceModal}>Пополнить баланс</button>
+                <button onClick={handleBuyFromBalance}>
+                  Оплатить с баланса
+                </button>
               </div>
             </div>
           </div>
