@@ -173,6 +173,19 @@ export const getUserOrders = async (phone = phoneNumberConst) => {
     throw error;
   }
 };
+export const getOrderUsers = async (sale_id) => {
+  try {
+    const response = await axiosInstance.get(`/sales/getOrderUsers/${sale_id}`);
+    console.log("User orders retrieved:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      alert("Данного сбора не найдено");
+    }
+    handleAxiosError(error);
+    throw error;
+  }
+};
 
 // Function to create a new support ticket
 export const createSupportTicket = async (supportData) => {

@@ -5,6 +5,7 @@ const HistoryCard = ({
   title,
   price,
   date,
+  quantity,
   collected_need,
   collected_now,
   cancel,
@@ -45,7 +46,7 @@ const HistoryCard = ({
         <img src={image} alt="" />
         <div className="info">
           <h4>{title}</h4>
-          <span>Оплачено: ${price * 0.1}</span>
+          <span>Оплачено: ${price * quantity * 0.1}</span>
           <span>${price}</span>
           <div className="date">{date}</div>
         </div>

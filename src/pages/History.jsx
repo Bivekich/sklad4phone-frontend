@@ -38,9 +38,10 @@ const History = () => {
           {orders.map((order) => (
             <HistoryCard
               key={order.id}
-              image={order.image}
+              image={order.images[0]}
               title={order.name}
               price={order.price}
+              quantity={order.quantity}
               collected_need={order.collected_need}
               collected_now={order.collected_now}
               cancel={order.cancel}

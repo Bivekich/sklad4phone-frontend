@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CardModal from "./CardModal";
+import CardMembersModal from "./CardMembersModal";
 import "../../styles/Card.css";
 import { deleteSale } from "../../server";
 const Card = ({
@@ -15,6 +16,7 @@ const Card = ({
   collected_now,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
 
   const handleShow = () => {
     setIsModalOpen(true);
@@ -27,6 +29,10 @@ const Card = ({
 
   const onDelete = async () => {
     await deleteSale(id);
+  };
+
+  const toggleMembers = async () => {
+    setIsMembersModalOpen(!isMembersModalOpen);
   };
 
   const progressPercentage = Math.min(
@@ -64,13 +70,22 @@ const Card = ({
             </button>
           )}
           {isCompleted && admin && (
-            <button
-              type="button"
-              className="delete-button"
-              onClick={() => onDelete(id)}
-            >
-              Удалить
-            </button>
+            <>
+              <button
+                type="button"
+                className="delete-button"
+                onClick={() => onDelete(id)}
+              >
+                Удалить
+              </button>
+              <button
+                type="button"
+                // className="delete-button"
+                onClick={toggleMembers}
+              >
+                Участники сбора
+              </button>
+            </>
           )}
         </div>
         <div className="price">${price}</div>
@@ -100,6 +115,11 @@ const Card = ({
           collected_need,
           collected_now,
         }}
+      />
+      <CardMembersModal
+        sale_id={id}
+        isOpen={isMembersModalOpen}
+        onClose={toggleMembers}
       />
     </>
   );

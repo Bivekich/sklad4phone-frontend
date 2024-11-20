@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css"; // Import styles for UserModal
 import HistoryCard from "../HistoryCard";
-import { updateUserById, getUserOrders } from "../../server";
+import { Link } from "react-router-dom";
+import {
+  updateUserById,
+  getUserOrders,
+  getUserByPhoneNumber,
+} from "../../server";
 
 const UserModal = ({ isOpen, onClose, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [editedUser, setEditedUser] = useState({
-    id: user.id,
-    first_name: user.first_name,
-    phone_number: user.phone_number,
-    balance: user.balance,
-    raiting: user.raiting,
-  });
+  const [editedUser, setEditedUser] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
+      const user_response = await getUserByPhoneNumber(user.phone_number);
+      setEditedUser(user_response);
       const response = await getUserOrders(editedUser.phone_number);
       setOrders(response);
     };
@@ -142,6 +143,12 @@ const UserModal = ({ isOpen, onClose, user }) => {
             </button>
           )}
         </div>
+        <Link
+          to={`https://t.me/${editedUser.username || editedUser.phone_number}`}
+        >
+          <button className="edit-button">Связаться</button>
+        </Link>
+        <br />
         <div>
           <h2>История сборов</h2>
           {orders.length > 0 ? (
@@ -149,10 +156,13 @@ const UserModal = ({ isOpen, onClose, user }) => {
               {orders.map((order) => (
                 <HistoryCard
                   key={order.id}
-                  image={order.image}
+                  image={order.images[0]}
                   title={order.name}
                   price={order.price}
-                  status={"Зарезервирован"}
+                  quantity={order.quantity}
+                  collected_need={order.collected_need}
+                  collected_now={order.collected_now}
+                  cancel={order.cancel}
                   date=""
                 />
               ))}
