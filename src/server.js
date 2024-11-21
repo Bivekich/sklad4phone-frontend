@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as cheerio from "cheerio";
 
 const baseURL =
   window.location.hostname === "localhost"
@@ -379,6 +380,28 @@ export const verifyBybitTransaction = async (saleId = null) => {
   }
 };
 
+// export const getCource = async () => {
+//   try {
+//     // Выполняем GET-запрос к указанному URL
+//     const response = await axios.get(
+//       "https://www.bybit.com/en/convert/usdt-to-rub/",
+//     );
+
+//     // Загружаем HTML-страницу в cheerio
+//     const $ = cheerio.load(response.data);
+
+//     // Находим блок с классом 'd-inline-flex align-center exchange-rate'
+//     const exchangeRateBlock = $(".card-info-price-box");
+
+//     // Извлекаем текст из блока
+//     const exchangeRateText = exchangeRateBlock.text().trim();
+
+//     // Выводим результат
+//     console.log(`Exchange Rate: ${exchangeRateText}`);
+//   } catch (error) {
+//     console.error(`Error fetching data from:`, error);
+//   }
+// };
 export const getCource = async () => {
   try {
     const response = await fetch("https://www.cbr-xml-daily.ru/latest.js");
@@ -391,7 +414,7 @@ export const getCource = async () => {
 
     console.log(`RUB to USD exchange rate: ${usdRate}`);
 
-    return usdRate;
+    return usdRate * 0.99;
   } catch (error) {
     console.error("Failed to get exchange rate:", error);
   }
