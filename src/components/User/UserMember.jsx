@@ -51,6 +51,7 @@ const UserMember = ({
         onClose={handleClose}
         user={{
           id,
+          phone_number,
         }}
       />
     </>

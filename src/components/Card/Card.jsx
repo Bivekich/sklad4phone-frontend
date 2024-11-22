@@ -108,12 +108,6 @@ const Card = ({
         admin={admin}
         product={{
           id,
-          images,
-          name,
-          description,
-          price,
-          collected_need,
-          collected_now,
         }}
       />
       <CardMembersModal

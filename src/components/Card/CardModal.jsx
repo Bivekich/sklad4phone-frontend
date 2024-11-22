@@ -10,6 +10,7 @@ import {
   verifyBybitTransaction,
   getCource,
   calcelSale,
+  getSaleById,
 } from "../../server";
 import BalanceModal from "../BalanceModal";
 import { Link } from "react-router-dom";
@@ -26,7 +27,11 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
   useEffect(() => {
     setStep(0);
-    setEditedProduct(product);
+    const fetchData = async () => {
+      const response = await getSaleById(product.id);
+      setEditedProduct(response);
+    };
+    fetchData();
   }, [isOpen, product]);
 
   useEffect(() => {
@@ -57,12 +62,15 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   };
 
   const handlePay = async () => {
-    await createTransaction(product.price * selectedAmount, product.id);
+    await createTransaction(
+      editedProduct.price * selectedAmount,
+      editedProduct.id,
+    );
     setStep(3);
   };
 
   const handleConfirmPayment = async () => {
-    const response = await verifyBybitTransaction(product.id);
+    const response = await verifyBybitTransaction(editedProduct.id);
     if (response) {
       alert("Покупка успешно подтверждена");
     } else {
@@ -71,37 +79,37 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   };
 
   const totalSumm = () => {
-    const baseAmount = product.price * selectedAmount * 0.1;
+    const baseAmount = editedProduct.price * selectedAmount * 0.1;
     const randomFraction = Math.random();
     const finalTotal = baseAmount + randomFraction;
     return finalTotal.toFixed(2);
   };
 
   const handleDelete = async () => {
-    await deleteSale(product.id);
+    await deleteSale(editedProduct.id);
     alert("Сбор успешно удален!");
 
     window.location.reload();
   };
 
   const handleCancel = async () => {
-    await calcelSale(product.id);
+    await calcelSale(editedProduct.id);
     onClose();
   };
 
   const handleSave = async () => {
-    if (editedProduct.price < product.price) {
+    if (editedProduct.price < editedProduct.price) {
       alert("Цена не может быть ниже текущей стоимости.");
       return;
     }
 
-    if (editedProduct.collected_now < product.collected_now) {
+    if (editedProduct.collected_now < editedProduct.collected_now) {
       alert("Нельзя уменьшить значение 'Собрано сейчас'.");
       return;
     }
 
     try {
-      const result = await updateSale(product.id, editedProduct);
+      const result = await updateSale(editedProduct.id, editedProduct);
       setEditedProduct(result);
       setEditMode(false);
     } catch (error) {
@@ -111,7 +119,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   };
 
   const handleBuyFromBalance = async () => {
-    const response = await buyForSale(product.id, selectedAmount);
+    const response = await buyForSale(editedProduct.id, selectedAmount);
     window.location.reload();
     console.log(response);
   };
@@ -119,7 +127,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const handleUsdtPayment = async () => {
     try {
       setTotal(totalSumm());
-      await createBybitTransaction(total, product.id);
+      await createBybitTransaction(total, editedProduct.id);
       setStep(4);
     } catch (error) {
       console.error("Ошибка при оплате USDT:", error);
@@ -133,14 +141,17 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   };
 
   const nextImage = () => {
+    const minus = editedProduct.video ? 0 : 1;
     setCurrentImageIndex((prevIndex) =>
-      prevIndex < product.images.length - 1 ? prevIndex + 1 : 0,
+      prevIndex < editedProduct.images.length - minus ? prevIndex + 1 : 0,
     );
   };
 
   const prevImage = () => {
+    const minus = editedProduct.video ? 0 : 1;
+
     setCurrentImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : product.images.length - 1,
+      prevIndex > 0 ? prevIndex - 1 : editedProduct.images.length - minus,
     );
   };
 
@@ -152,17 +163,24 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             &#215;
           </button>
 
-          {/* Video Display */}
-          {product.videoUrl && (
-            <div className="video-container">
-              <video controls src={product.videoUrl} />
-            </div>
-          )}
           <div className="image-slider">
-            <img
-              src={product.images[currentImageIndex]}
-              alt={editedProduct.name}
-            />
+            {0 === currentImageIndex && editedProduct.video ? (
+              editedProduct.video && (
+                <div className="video-container">
+                  <video controls src={editedProduct.video} />
+                </div>
+              )
+            ) : (
+              <img
+                src={
+                  editedProduct.images[
+                    currentImageIndex - (editedProduct.video ? 1 : 0)
+                  ]
+                }
+                alt={editedProduct.name}
+              />
+            )}
+
             <div className="two_buttons">
               <button onClick={prevImage}>&#10094;</button>
               <button onClick={nextImage}>&#10095;</button>
@@ -194,13 +212,16 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             {(Number(user.balance) / course).toFixed(2)}P)
           </div>
           <div className="modal-price">
-            Сумма: ${product.price * selectedAmount} (
-            {(Number(product.price * selectedAmount) / course).toFixed(2)}P)
+            Сумма: ${editedProduct.price * selectedAmount} (
+            {(Number(editedProduct.price * selectedAmount) / course).toFixed(2)}
+            P)
           </div>
           <div className="modal-price">
             Предоплата за бронь 10% от суммы заказа: <br />$
-            {product.price * selectedAmount * 0.1}(
-            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
+            {editedProduct.price * selectedAmount * 0.1}(
+            {(
+              Number(editedProduct.price * selectedAmount * 0.1) / course
+            ).toFixed(2)}
             P)
           </div>
           {admin ? (
@@ -340,14 +361,15 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               <p>Выберите способ оплаты</p>
               <h2>
                 10% от суммы заказа: <br />$
-                {product.price * selectedAmount * 0.1}(
+                {editedProduct.price * selectedAmount * 0.1}(
                 {(
-                  Number(product.price * selectedAmount * 0.1) / course
+                  Number(editedProduct.price * selectedAmount * 0.1) / course
                 ).toFixed(2)}
                 P)
               </h2>
 
-              {user.balance < Number(product.price * selectedAmount * 0.1) && (
+              {user.balance <
+                Number(editedProduct.price * selectedAmount * 0.1) && (
                 <div className="two_buttons">
                   <button onClick={toggleBalanceModal}>Пополнить баланс</button>
                 </div>
@@ -373,8 +395,10 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           </button>
           <p>
             Свяжитесь с менеджером для оплаты $
-            {product.price * selectedAmount * 0.1} (
-            {(Number(product.price * selectedAmount * 0.1) / course).toFixed(2)}
+            {editedProduct.price * selectedAmount * 0.1} (
+            {(
+              Number(editedProduct.price * selectedAmount * 0.1) / course
+            ).toFixed(2)}
             P)
           </p>
           <h2>
@@ -418,13 +442,6 @@ CardModal.propTypes = {
   admin: PropTypes.bool.isRequired,
   product: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.string).isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    videoUrl: PropTypes.string, // Optional video URL
-    collected_need: PropTypes.number.isRequired,
-    collected_now: PropTypes.number.isRequired,
   }).isRequired,
 };
 

@@ -382,39 +382,38 @@ export const verifyBybitTransaction = async (saleId = null) => {
 
 // export const getCource = async () => {
 //   try {
-//     // Выполняем GET-запрос к указанному URL
-//     const response = await axios.get(
-//       "https://www.bybit.com/en/convert/usdt-to-rub/",
-//     );
+//     axios
+//       .get("https://api.binance.com/api/v3/avgPrice?symbol=USDUSDT")
+//       .then((response) => {
+//         const body = response.data;
+//         console.log(body.price);
+//       });
 
-//     // Загружаем HTML-страницу в cheerio
-//     const $ = cheerio.load(response.data);
-
-//     // Находим блок с классом 'd-inline-flex align-center exchange-rate'
-//     const exchangeRateBlock = $(".card-info-price-box");
-
-//     // Извлекаем текст из блока
-//     const exchangeRateText = exchangeRateBlock.text().trim();
-
-//     // Выводим результат
-//     console.log(`Exchange Rate: ${exchangeRateText}`);
+//     // // Выводим результат
+//     // console.log(`Exchange Rate: ${exchangeRateText}`);
 //   } catch (error) {
 //     console.error(`Error fetching data from:`, error);
 //   }
 // };
 export const getCource = async () => {
   try {
-    const response = await fetch("https://www.cbr-xml-daily.ru/latest.js");
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.statusText}`);
+    const responseEUR = await fetch("https://www.cbr-xml-daily.ru/latest.js");
+    if (!responseEUR.ok) {
+      throw new Error(`Error fetching data: ${responseEUR.statusText}`);
     }
 
-    const data = await response.json();
-    const usdRate = data.rates.USD;
+    const data = await responseEUR.json();
+    const eurRate = data.rates.EUR;
 
-    console.log(`RUB to USD exchange rate: ${usdRate}`);
+    const responseUSDT = await fetch(
+      "https://api.binance.com/api/v3/avgPrice?symbol=EURUSDT",
+    );
 
-    return usdRate * 0.99;
+    const dataUSDT = await responseUSDT.json();
+    const usdtRate = dataUSDT.price;
+
+    console.log(eurRate * usdtRate);
+    return eurRate * usdtRate;
   } catch (error) {
     console.error("Failed to get exchange rate:", error);
   }

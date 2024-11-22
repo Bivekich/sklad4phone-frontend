@@ -218,3 +218,17 @@
     flex-direction: column;
     gap: 2rem;
 }
+
+.modal-overlay .video-container {
+    margin-top: 0.5rem;
+}
+
+.modal-overlay .video-container,
+.modal-overlay .video-container video {
+    max-width: 100%;
+}
+
+.modal-overlay .historyCard {
+    margin-left: 0;
+    margin-right: 0;
+}

@@ -18,7 +18,7 @@ const UserModal = ({ isOpen, onClose, user }) => {
     const fetchData = async () => {
       const user_response = await getUserByPhoneNumber(user.phone_number);
       setEditedUser(user_response);
-      const response = await getUserOrders(editedUser.phone_number);
+      const response = await getUserOrders(user.phone_number);
       setOrders(response);
     };
 

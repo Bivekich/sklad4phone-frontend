@@ -43,6 +43,7 @@ const User = ({ admin, balance, first_name, id, phone_number, raiting }) => {
         onClose={handleClose}
         user={{
           id,
+          phone_number,
         }}
       />
     </>

@@ -23,15 +23,15 @@ const UserList = () => {
   return (
     <div className="user-list">
       {users.length > 0 ? (
-        users.map((user) => (
+        users.map((user_) => (
           <User
-            key={user.id} // Ensure to use a unique key
-            admin={user.admin}
-            balance={user.balance}
-            first_name={user.first_name}
-            id={user.id}
-            phone_number={user.phone_number}
-            raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
+            key={user_.id} // Ensure to use a unique key
+            admin={user_.admin}
+            balance={user_.balance}
+            first_name={user_.first_name}
+            id={user_.id}
+            phone_number={user_.phone_number}
+            raiting={(parseFloat(user_.raiting) || 0).toFixed(1)}
           />
         ))
       ) : (
