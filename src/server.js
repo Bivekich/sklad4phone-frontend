@@ -105,6 +105,42 @@ export const getSaleById = async (id) => {
   }
 };
 
+export const getSaleInHistoryById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/sales/${id}/history`);
+    console.log("HistorySale data by ID:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+export const createLog = async (message, phone = phoneNumberConst) => {
+  try {
+    const response = await axiosInstance.post("/logs/", {
+      phoneNumber: phone,
+      action: message,
+    });
+    console.log("HistorySale data by ID:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
+export const getAllUserLogs = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/logs/${id}`);
+    console.log("HistorySale data by ID:", response.data);
+    return response.data;
+  } catch (error) {
+    handleAxiosError(error);
+    throw error;
+  }
+};
+
 // Function to update a sale by its ID
 export const updateSale = async (id, updateData) => {
   try {

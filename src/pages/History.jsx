@@ -11,7 +11,22 @@ const History = () => {
     const fetchData = async () => {
       try {
         const response = await getUserOrders();
-        setOrders(response);
+
+        // Create a new sorted array based on status
+        const sortedOrders = response.reduce((acc, order) => {
+          if (order.collected_now === order.collected_need) {
+            acc.splice(acc.length - 2, 0, order); // Add before the last element
+          } else if (order.cancel) {
+            acc.splice(acc.length - 1, 0, order); // Add before the last element
+          } else if (order.deleted) {
+            acc.push(order); // Add to the end
+          } else {
+            acc.unshift(order); // Add to the beginning
+          }
+          return acc;
+        }, []);
+
+        setOrders(sortedOrders);
       } catch (error) {
         setError(error);
       } finally {
@@ -36,17 +51,7 @@ const History = () => {
       {orders.length > 0 ? (
         <ul>
           {orders.map((order) => (
-            <HistoryCard
-              key={order.id}
-              image={order.images[0]}
-              title={order.name}
-              price={order.price}
-              quantity={order.quantity}
-              collected_need={order.collected_need}
-              collected_now={order.collected_now}
-              cancel={order.cancel}
-              date=""
-            />
+            <HistoryCard key={order.id} id={order.id} />
           ))}
         </ul>
       ) : (

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/Modal.css";
 import {
-  createTransaction,
+  createLog,
   createBybitTransaction,
   verifyBybitTransaction,
   getCource,
@@ -29,7 +29,7 @@ const BalanceModal = ({ user, onClose }) => {
 
   const handlePay = async () => {
     try {
-      await createTransaction(amount);
+      await createLog(`Запросил пополнение через менеджера на $${amount}`);
       alert("Свяжитесь с менеджером для пополнения баланса");
       setStep(3); // Step to show confirmation
     } catch (error) {

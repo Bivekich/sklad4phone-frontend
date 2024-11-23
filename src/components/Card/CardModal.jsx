@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css"; // Ensure you have appropriate styles for the modal
+import UserMember from "../User/UserMember"; // Import the User component
 import {
   buyForSale,
   deleteSale,
@@ -11,6 +12,7 @@ import {
   getCource,
   calcelSale,
   getSaleById,
+  getOrderUsers,
 } from "../../server";
 import BalanceModal from "../BalanceModal";
 import { Link } from "react-router-dom";
@@ -24,7 +26,16 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [total, setTotal] = useState(0);
   const [course, setCourse] = useState(0);
   const [isBalanceModalOpen, setIsBalanceModalOpen] = useState(false);
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const respanse = await getOrderUsers(product.id);
 
+      setUsers(respanse);
+    };
+
+    fetchUsers();
+  }, [product]);
   useEffect(() => {
     setStep(0);
     const fetchData = async () => {
@@ -230,6 +241,24 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               <button onClick={handleCancel}>Отменить сбор</button>
               <button onClick={handleDelete}>Удалить</button>
               <button onClick={onClose}>Готово</button>
+              <br />
+              <br />
+              {users.length > 0 ? (
+                users.map((user) => (
+                  <UserMember
+                    key={user.id} // Ensure to use a unique key
+                    admin={user.admin}
+                    quantity={user.quantity}
+                    balance={user.balance}
+                    first_name={user.first_name}
+                    id={user.id}
+                    phone_number={user.phone_number}
+                    raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
+                  />
+                ))
+              ) : (
+                <p>Пользователей не найдено.</p> // Message when no users are available
+              )}
             </>
           ) : (
             <>

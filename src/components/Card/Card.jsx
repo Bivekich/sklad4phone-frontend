@@ -29,6 +29,7 @@ const Card = ({
 
   const onDelete = async () => {
     await deleteSale(id);
+    window.location.reload();
   };
 
   const toggleMembers = async () => {

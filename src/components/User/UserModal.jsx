@@ -7,19 +7,31 @@ import {
   updateUserById,
   getUserOrders,
   getUserByPhoneNumber,
+  createLog,
+  getAllUserLogs,
 } from "../../server";
 
 const UserModal = ({ isOpen, onClose, user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [logs, setLogs] = useState([]);
   const [editedUser, setEditedUser] = useState({});
+  const [oldBalance, setOldBalance] = useState(0); // Track the old balance
 
   useEffect(() => {
     const fetchData = async () => {
       const user_response = await getUserByPhoneNumber(user.phone_number);
       setEditedUser(user_response);
+      setOldBalance(user_response.balance);
       const response = await getUserOrders(user.phone_number);
       setOrders(response);
+      console.log("/n");
+      console.log("/n");
+      console.log(user);
+      console.log("/n");
+      console.log("/n");
+      const logs_response = await getAllUserLogs(user.id);
+      setLogs(logs_response);
     };
 
     fetchData();
@@ -40,7 +52,7 @@ const UserModal = ({ isOpen, onClose, user }) => {
     console.log("Updated user details:", editedUser);
 
     try {
-      // Use the updateUserById function to send the update request
+      // Use the updateUser ById function to send the update request
       await updateUserById(editedUser.id, {
         // Pass the user ID
         first_name: editedUser.first_name,
@@ -48,7 +60,16 @@ const UserModal = ({ isOpen, onClose, user }) => {
         raiting: editedUser.raiting,
       });
 
-      console.log("User updated successfully");
+      // Check if the balance has changed
+      if (oldBalance !== editedUser.balance) {
+        await createLog(
+          `Баланс изменен с $${oldBalance} на $${editedUser.balance}`,
+          editedUser.phone_number,
+        );
+        // alert(`Баланс изменен с $${oldBalance} на $${editedUser.balance}`); // Send notification
+      }
+
+      console.log("User  updated successfully");
     } catch (error) {
       console.error("Error updating user:", error);
       // Handle error (show notification, etc.)
@@ -149,22 +170,29 @@ const UserModal = ({ isOpen, onClose, user }) => {
           <button className="edit-button">Связаться</button>
         </Link>
         <br />
+        <br />
+        <div>
+          <h2>Информация о транцакциях</h2>
+          {logs.length > 0 ? (
+            <ul>
+              {logs.map((log) => (
+                <>
+                  <p>{log.action}</p>
+                </>
+              ))}
+            </ul>
+          ) : (
+            <div>Пока что здесь пусто(</div>
+          )}
+        </div>
+        <br />
+        <br />
         <div>
           <h2>История сборов</h2>
           {orders.length > 0 ? (
             <ul>
               {orders.map((order) => (
-                <HistoryCard
-                  key={order.id}
-                  image={order.images[0]}
-                  title={order.name}
-                  price={order.price}
-                  quantity={order.quantity}
-                  collected_need={order.collected_need}
-                  collected_now={order.collected_now}
-                  cancel={order.cancel}
-                  date=""
-                />
+                <HistoryCard key={order.id} id={order.id} />
               ))}
             </ul>
           ) : (
