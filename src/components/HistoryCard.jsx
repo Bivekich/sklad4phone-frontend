@@ -61,6 +61,15 @@ const HistoryCard = ({ id }) => {
   );
   const isCompleted = progressPercentage >= 100;
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0"); // Получаем день и добавляем ноль, если нужно
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Месяцы начинаются с 0
+    const year = String(date.getFullYear()).slice(-4); // Получаем последние две цифры года
+
+    return `${day}.${month}.${year}`;
+  };
+
   const color = isCompleted
     ? "gray"
     : progressPercentage >= 70
@@ -85,9 +94,10 @@ const HistoryCard = ({ id }) => {
       )}
       <div className="info">
         <h4>{product.name}</h4>
-        <span>Оплачено: ${product.price * (product.quantity || 0) * 0.1}</span>
-        <span>${product.price}</span>
-        <div className="date">{product.date}</div>
+        <span>Оплачено: ${product.price * (product.quantity || 1) * 0.1}</span>
+        <span>Количество: {product.quantity}</span>
+        <span>Цена: ${product.price}</span>
+        <span>{formatDate(product.createdAt)}</span>
       </div>
       <div className="column">
         <div

@@ -245,16 +245,19 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               <br />
               {users.length > 0 ? (
                 users.map((user) => (
-                  <UserMember
-                    key={user.id} // Ensure to use a unique key
-                    admin={user.admin}
-                    quantity={user.quantity}
-                    balance={user.balance}
-                    first_name={user.first_name}
-                    id={user.id}
-                    phone_number={user.phone_number}
-                    raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
-                  />
+                  <>
+                    <UserMember
+                      key={user.id} // Ensure to use a unique key
+                      admin={user.admin}
+                      quantity={user.quantity}
+                      balance={user.balance}
+                      first_name={user.first_name}
+                      id={user.id}
+                      phone_number={user.phone_number}
+                      raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
+                    />
+                    <br />
+                  </>
                 ))
               ) : (
                 <p>Пользователей не найдено.</p> // Message when no users are available
