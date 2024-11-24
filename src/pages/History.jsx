@@ -12,19 +12,31 @@ const History = () => {
       try {
         const response = await getUserOrders();
 
-        // Create a new sorted array based on status
-        const sortedOrders = response.reduce((acc, order) => {
-          if (order.collected_now === order.collected_need) {
-            acc.splice(acc.length - 2, 0, order); // Add before the last element
-          } else if (order.cancel) {
-            acc.splice(acc.length - 1, 0, order); // Add before the last element
-          } else if (order.deleted) {
-            acc.push(order); // Add to the end
-          } else {
-            acc.unshift(order); // Add to the beginning
-          }
-          return acc;
-        }, []);
+        // Создаем массивы для разных статусов
+        const collectedOrders = response.filter(
+          (order) => order.collected_now === order.collected_need,
+        );
+        const canceledOrders = response.filter(
+          (order) =>
+            order.cancel && order.collected_now !== order.collected_need,
+        );
+        const deletedOrders = response.filter(
+          (order) =>
+            order.deleted &&
+            !order.cancel &&
+            order.collected_now !== order.collected_need,
+        );
+        const otherOrders = response.filter(
+          (order) => !order.collected_now && !order.cancel && !order.deleted,
+        );
+
+        // Объединяем массивы в нужном порядке
+        const sortedOrders = [
+          ...otherOrders, // Добавляем обычные заказы в начале
+          ...collectedOrders, // Затем добавляем собранные заказы
+          ...canceledOrders, // Затем добавляем отмененные заказы
+          ...deletedOrders, // И в конце добавляем удаленные заказы
+        ];
 
         setOrders(sortedOrders);
       } catch (error) {

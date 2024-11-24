@@ -24,12 +24,31 @@ const UserModal = ({ isOpen, onClose, user }) => {
       setEditedUser(user_response);
       setOldBalance(user_response.balance);
       const response = await getUserOrders(user.phone_number);
-      setOrders(response);
-      console.log("/n");
-      console.log("/n");
-      console.log(user);
-      console.log("/n");
-      console.log("/n");
+      // Создаем массивы для разных статусов
+      const collectedOrders = response.filter(
+        (order) => order.collected_now === order.collected_need,
+      );
+      const canceledOrders = response.filter(
+        (order) => order.cancel && order.collected_now !== order.collected_need,
+      );
+      const deletedOrders = response.filter(
+        (order) =>
+          order.deleted &&
+          !order.cancel &&
+          order.collected_now !== order.collected_need,
+      );
+      const otherOrders = response.filter(
+        (order) => !order.collected_now && !order.cancel && !order.deleted,
+      );
+
+      // Объединяем массивы в нужном порядке
+      const sortedOrders = [
+        ...otherOrders, // Добавляем обычные заказы в начале
+        ...collectedOrders, // Затем добавляем собранные заказы
+        ...canceledOrders, // Затем добавляем отмененные заказы
+        ...deletedOrders, // И в конце добавляем удаленные заказы
+      ];
+      setOrders(sortedOrders);
       const logs_response = await getAllUserLogs(user.id);
       setLogs(logs_response);
     };
@@ -76,6 +95,15 @@ const UserModal = ({ isOpen, onClose, user }) => {
     }
 
     setIsEditing(false); // Close editing mode after saving
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0"); // Получаем день и добавляем ноль, если нужно
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Месяцы начинаются с 0
+    const year = String(date.getFullYear()).slice(-4); // Получаем последние две цифры года
+
+    return `${day}.${month}.${year}`;
   };
 
   const increaseRating = () => {
@@ -177,7 +205,9 @@ const UserModal = ({ isOpen, onClose, user }) => {
             <ul>
               {logs.map((log) => (
                 <>
-                  <p>{log.action}</p>
+                  <p>
+                    {log.action} {formatDate(log.createdAt)}
+                  </p>
                 </>
               ))}
             </ul>
