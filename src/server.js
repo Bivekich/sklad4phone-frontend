@@ -434,7 +434,7 @@ export const verifyBybitTransaction = async (saleId = null) => {
 
 export const getCource = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/sales/getCource");
+    const response = await axiosInstance.get("/sales/getCource");
 
     console.log("cource");
     console.log(response);
