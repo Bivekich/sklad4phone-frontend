@@ -431,29 +431,42 @@ export const verifyBybitTransaction = async (saleId = null) => {
 //     console.error(`Error fetching data from:`, error);
 //   }
 // };
+
 export const getCource = async () => {
   try {
-    const responseEUR = await fetch("https://www.cbr-xml-daily.ru/latest.js");
-    if (!responseEUR.ok) {
-      throw new Error(`Error fetching data: ${responseEUR.statusText}`);
-    }
+    const response = await axios.get("http://localhost:3000/sales/getCource");
 
-    const data = await responseEUR.json();
-    const eurRate = data.rates.EUR;
-
-    const responseUSDT = await fetch(
-      "https://api.binance.com/api/v3/avgPrice?symbol=EURUSDT",
-    );
-
-    const dataUSDT = await responseUSDT.json();
-    const usdtRate = dataUSDT.price;
-
-    console.log(eurRate * usdtRate);
-    return eurRate * usdtRate;
+    console.log("cource");
+    console.log(response);
+    return 1 / response.data.price;
   } catch (error) {
-    console.error("Failed to get exchange rate:", error);
+    console.error("Произошла ошибка при получении данных:", error);
   }
 };
+
+// export const getCource = async () => {
+//   try {
+//     const responseEUR = await fetch("https://www.cbr-xml-daily.ru/latest.js");
+//     if (!responseEUR.ok) {
+//       throw new Error(`Error fetching data: ${responseEUR.statusText}`);
+//     }
+
+//     const data = await responseEUR.json();
+//     const eurRate = data.rates.EUR;
+
+//     const responseUSDT = await fetch(
+//       "https://api.binance.com/api/v3/avgPrice?symbol=EURUSDT",
+//     );
+
+//     const dataUSDT = await responseUSDT.json();
+//     const usdtRate = dataUSDT.price;
+
+//     console.log(eurRate * usdtRate);
+//     return eurRate * usdtRate;
+//   } catch (error) {
+//     console.error("Failed to get exchange rate:", error);
+//   }
+// };
 
 export const broadcastNotification = async (formData) => {
   try {
