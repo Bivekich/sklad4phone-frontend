@@ -14,20 +14,20 @@ const History = () => {
 
         // Создаем массивы для разных статусов
         const collectedOrders = response.filter(
-          (order) => order.collected_now === order.collected_need,
+          (order) => order.collected_now === order.collected_need
         );
         const canceledOrders = response.filter(
           (order) =>
-            order.cancel && order.collected_now !== order.collected_need,
+            order.cancel && order.collected_now !== order.collected_need
         );
         const deletedOrders = response.filter(
           (order) =>
             order.deleted &&
             !order.cancel &&
-            order.collected_now !== order.collected_need,
+            order.collected_now !== order.collected_need
         );
         const otherOrders = response.filter(
-          (order) => !order.collected_now && !order.cancel && !order.deleted,
+          (order) => !order.collected_now && !order.cancel && !order.deleted
         );
 
         // Объединяем массивы в нужном порядке
@@ -59,13 +59,13 @@ const History = () => {
 
   return (
     <div>
-      <h2>История сборов</h2>
+      <h1 className="text-2xl font-bold mb-4">История сборов</h1>
       {orders.length > 0 ? (
-        <ul>
+        <div className="space-y-4 mx-4">
           {orders.map((order) => (
             <HistoryCard key={order.id} id={order.id} />
           ))}
-        </ul>
+        </div>
       ) : (
         <div>Пока что здесь пусто(</div>
       )}

@@ -6,6 +6,8 @@ const baseURL =
     ? "http://localhost:3000"
     : "https://api.sklad4phone.ru";
 
+// const baseURL = "https://api.sklad4phone.ru";
+
 const axiosInstance = axios.create({
   baseURL,
   timeout: 10000, // Set timeout to 10 seconds
@@ -269,7 +271,7 @@ export const updateSupportTicket = async (id, updateData) => {
   try {
     const response = await axiosInstance.put(
       `/support/tickets/${id}`,
-      updateData,
+      updateData
     );
     console.log("Updated support ticket:", response.data);
     return response.data;
@@ -298,7 +300,7 @@ export const updateSupportTicketStatus = async (id, status) => {
       `/support/tickets/${id}/status`,
       {
         status,
-      },
+      }
     );
     console.log("Updated support ticket status:", response.data);
     return response.data;
@@ -355,7 +357,7 @@ export const updateTransactionStatus = async (id, paid = false) => {
       `/transactions/${id}/setpaidstatus`,
       {
         paid,
-      },
+      }
     );
     console.log(`Updated transaction ${id} status:`, response.data);
     return response.data;
@@ -383,7 +385,7 @@ export const sendNotification = async (message) => {
 // Create a transaction for a specific user
 export const createBybitTransaction = async (
   additionalAmount,
-  saleId = null,
+  saleId = null
 ) => {
   try {
     const response = await axiosInstance.post(
@@ -391,7 +393,7 @@ export const createBybitTransaction = async (
       {
         additionalAmount,
         saleId, // Include saleId in the payload
-      },
+      }
     );
     return response.data; // Returns the created transaction details
   } catch (error) {
@@ -407,7 +409,7 @@ export const verifyBybitTransaction = async (saleId = null) => {
       `/bybit/${phoneNumberConst}/verify`,
       {
         params: { saleId }, // Pass saleId as a query parameter
-      },
+      }
     );
     return response.data; // Returns verification result and balance
   } catch (error) {
@@ -483,7 +485,7 @@ export const broadcastNotification = async (formData) => {
         headers: {
           "Content-Type": "multipart/form-data", // Ensure it's multipart/form-data
         },
-      },
+      }
     );
 
     console.log("Broadcast sent successfully:", response.data);
@@ -494,7 +496,7 @@ export const broadcastNotification = async (formData) => {
       console.error("Server responded with error:", error.response.data);
       alert(
         "Ошибка при отправке сообщения: " + error.response.data.message ||
-          "Неизвестная ошибка.",
+          "Неизвестная ошибка."
       );
     } else {
       console.error("Error sending broadcast notification:", error.message);

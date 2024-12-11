@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css"; // Ensure you have appropriate styles for the modal
 import UserMember from "../User/UserMember"; // Import the User component
+import { Swiper, SwiperSlide } from "swiper/react";
 import {
   buyForSale,
   deleteSale,
@@ -16,6 +17,10 @@ import {
 } from "../../server";
 import BalanceModal from "../BalanceModal";
 import { Link } from "react-router-dom";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Button } from "../ui/button";
 
 const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [selectedAmount, setSelectedAmount] = useState(1);
@@ -75,7 +80,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const handlePay = async () => {
     await createTransaction(
       editedProduct.price * selectedAmount,
-      editedProduct.id,
+      editedProduct.id
     );
     setStep(3);
   };
@@ -154,7 +159,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const nextImage = () => {
     const minus = editedProduct.video ? 0 : 1;
     setCurrentImageIndex((prevIndex) =>
-      prevIndex < editedProduct.images.length - minus ? prevIndex + 1 : 0,
+      prevIndex < editedProduct.images.length - minus ? prevIndex + 1 : 0
     );
   };
 
@@ -162,7 +167,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
     const minus = editedProduct.video ? 0 : 1;
 
     setCurrentImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : editedProduct.images.length - minus,
+      prevIndex > 0 ? prevIndex - 1 : editedProduct.images.length - minus
     );
   };
 
@@ -174,7 +179,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             &#215;
           </button>
 
-          <div className="image-slider">
+          {/* <div className="image-slider">
             {0 === currentImageIndex && editedProduct.video ? (
               editedProduct.video && (
                 <div className="video-container">
@@ -196,12 +201,29 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               <button onClick={prevImage}>&#10094;</button>
               <button onClick={nextImage}>&#10095;</button>
             </div>
-          </div>
+          </div> */}
 
-          <h2>{editedProduct.name}</h2>
-          <p>{editedProduct.description}</p>
+          <Swiper className="image-slider">
+            {editedProduct.video && (
+              <SwiperSlide>
+                <div className="video-container">
+                  <video controls src={editedProduct.video} />
+                </div>
+              </SwiperSlide>
+            )}
+            {editedProduct.images.map((image, index) => (
+              <SwiperSlide key={index}>
+                <img src={image} alt={editedProduct.name} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <h1 className="text-start text-5xl my-2 font-semibold">
+            {editedProduct.name}
+          </h1>
+          <p className="text-start ">{editedProduct.description}</p>
+          <p className="modal-price text-start font-medium">Количество: </p>
           <div className="modal-progress">
-            <span>{selectedAmount}</span>
+            <span>1</span>
             <span>
               {editedProduct.collected_need - editedProduct.collected_now}
             </span>
@@ -216,20 +238,26 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               onChange={handleSliderChange}
               className="amount-slider"
             />
-            <div className="slider-value">Количество: {selectedAmount} шт</div>
           </div>
-          <div className="modal-price">
+          <p className="modal-price text-start font-medium">
+            Выбрано: {selectedAmount} шт
+          </p>
+
+          {/* <div className="modal-price ml-0">
             Сейчас на счету: ${user.balance} (
             {(Number(user.balance) / course).toFixed(2)}P)
+          </div> */}
+          <div className="modal-price text-start">
+            В наличии:{" "}
+            {editedProduct.collected_need - editedProduct.collected_now} шт
           </div>
-          <div className="modal-price">
+          <div className="modal-price text-start font-semibold">
             Сумма: ${editedProduct.price * selectedAmount} (
             {(Number(editedProduct.price * selectedAmount) / course).toFixed(2)}
             P)
           </div>
-          <div className="modal-price">
-            Предоплата за бронь 10% от суммы заказа: <br />$
-            {editedProduct.price * selectedAmount * 0.1}(
+          <div className="modal-price text-start">
+            Предоплата: ${editedProduct.price * selectedAmount * 0.1}(
             {(
               Number(editedProduct.price * selectedAmount * 0.1) / course
             ).toFixed(2)}
@@ -265,7 +293,9 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             </>
           ) : (
             <>
-              <button onClick={handleNextStep}>Забронировать</button>
+              <Button className="w-full" onClick={handleNextStep}>
+                Забронировать
+              </Button>
             </>
           )}
         </div>
@@ -366,11 +396,11 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           <h2>Внимание</h2>
           <p>Изучите правила и условия</p>
           <Link to="/agreement/service_rules">Правила и условия</Link>
-          <div className="two_buttons">
-            <button className="second_button" onClick={handleBack}>
+          <div className="grid grid-cols-2 gap-5">
+            <Button className="second_button" onClick={handleBack}>
               Отмена
-            </button>
-            <button onClick={handleNextStep}>Забронировать</button>
+            </Button>
+            <Button onClick={handleNextStep}>Забронировать</Button>
           </div>
         </div>
       </div>
@@ -403,13 +433,15 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               {user.balance <
                 Number(editedProduct.price * selectedAmount * 0.1) && (
                 <div className="two_buttons">
-                  <button onClick={toggleBalanceModal}>Пополнить баланс</button>
+                  <Button className="w-full" onClick={toggleBalanceModal}>
+                    Пополнить баланс
+                  </Button>
                 </div>
               )}
               <div className="two_buttons">
-                <button onClick={handleBuyFromBalance}>
+                <Button className="w-full" onClick={handleBuyFromBalance}>
                   Оплатить с баланса
-                </button>
+                </Button>
               </div>
             </div>
           </div>

@@ -32,7 +32,7 @@ const CardList = ({ user }) => {
     const results = cards.filter(
       (card) =>
         card.name.toLowerCase().includes(search.toLowerCase()) || // Filter by name
-        card.description.toLowerCase().includes(search.toLowerCase()), // Filter by description
+        card.description.toLowerCase().includes(search.toLowerCase()) // Filter by description
     );
     setFilteredCards(results); // Update filtered cards
   }, [search, cards]); // Re-run the filter whenever search or cards change
@@ -48,20 +48,34 @@ const CardList = ({ user }) => {
             </button>
           )}
         </h3>
-        {filteredCards.map((item, index) => (
-          <Card
-            user={user}
-            key={index}
-            admin={user.admin}
-            id={item.id}
-            images={item.images}
-            name={item.name}
-            description={item.description}
-            price={item.price}
-            collected_need={item.collected_need}
-            collected_now={item.collected_now}
-          />
-        ))}
+        <div className="flex flex-col gap-2">
+          {filteredCards.map((item, index) => (
+            <Card
+              user={user}
+              key={index}
+              admin={user.admin}
+              id={item.id}
+              images={item.images}
+              name={item.name}
+              description={item.description}
+              price={item.price}
+              collected_need={item.collected_need}
+              collected_now={item.collected_now}
+            />
+          ))}
+        </div>
+        {/* <Card
+          user={user}
+          key={0}
+          admin={user.admin}
+          id={1}
+          images={[""]}
+          name={"134"}
+          description={"5654645"}
+          price={3453}
+          collected_need={1}
+          collected_now={10}
+        /> */}
       </div>
       {modal && (
         <CreateCard isOpen={modal} onClose={() => setShowModal(false)} />

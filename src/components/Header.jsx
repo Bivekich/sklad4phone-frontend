@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Button } from "./ui/button";
+import { Menu, DollarSign } from "lucide-react";
+import { UserInfo } from "./UserInfo";
 import BalanceModal from "./BalanceModal";
 
 const Header = ({ user }) => {
@@ -11,103 +15,76 @@ const Header = ({ user }) => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleBalanceModal = () => {
-    setIsBalanceModalOpen(!isBalanceModalOpen);
-  };
-
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
+  const toggleBalanceModal = () => {
+    setIsBalanceModalOpen(!isBalanceModalOpen);
+  };
+
   return (
     <>
-      <header>
-        <button className="menu-button" onClick={toggleMenu}>
-          <img src="menu.svg" alt="menu" />
-        </button>
-        <img src="logo_header.svg" alt="logo" />
-        <div className="wallet" onClick={toggleBalanceModal}>
-          <span>{user ? user.balance : "Loading..."}</span>
-          <img src="wallet.svg" alt="wallet" />
-        </div>
-      </header>
-
-      {/* Sidebar Menu */}
-      <div className={`sidebar ${isMenuOpen ? "open" : ""}`}>
-        <button className="close-button" onClick={closeMenu}>
-          &#215;
-        </button>
-        <nav>
-          <div className="acc_info">
-            <img src="default_ava.svg" alt="default_ava" />
-            <div className="acc_info_col">
-              <h3>{user ? user.first_name : "Loading..."}</h3>
-              <span>ID: {user ? user.id : "Loading..."}</span>
-            </div>
-          </div>
-          <div className="hr"></div>
-          <ul>
-            <li onClick={closeMenu}>
-              <img src="home.svg" alt="home" />
-              <Link to="/">Главная</Link>
-            </li>
-            {user.admin ? (
-              <>
-                <li onClick={closeMenu}>
-                  <img src="person.svg" alt="person" />
-                  <Link to="/users">Пользователи</Link>
-                </li>
-                {/* <li onClick={closeMenu}>
-                  <img src="book.svg" alt="book" />
-                  <Link to="/users-booking">Бронь пользователей</Link>
-                </li> */}
-              </>
-            ) : (
-              <>
-                <li onClick={closeMenu}>
-                  <img src="person.svg" alt="person" />
-                  <Link to="/account">Мой аккаунт</Link>
-                </li>
-                <li onClick={closeMenu}>
-                  <img src="history.svg" alt="history" />
-                  <Link to="/history">История сборов</Link>
-                </li>
-              </>
-            )}
-            <li onClick={closeMenu}>
-              <img src="bell.svg" alt="bell" />
-              <Link
-                to={
-                  user.admin
-                    ? "/notifications"
-                    : "https://t.me/Sklad4Phones_bot"
-                }
-              >
+      <header className="flex items-center justify-between p-4 bg-background border-b mb-6">
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" onClick={toggleMenu}>
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <UserInfo name={user.first_name} id={user.id} />
+            <nav className="flex flex-col space-y-4">
+              <Link to="/" className="text-lg" onClick={closeMenu}>
+                Главная
+              </Link>
+              <Link to="/account" className="text-lg" onClick={closeMenu}>
+                Мой профиль
+              </Link>
+              <Link to="/history" className="text-lg" onClick={closeMenu}>
+                История сборов
+              </Link>
+              <Link to="/notifications" className="text-lg" onClick={closeMenu}>
                 Уведомления
               </Link>
-            </li>
-            <li onClick={closeMenu}>
-              <img src="headphones.svg" alt="headphones" />
-              <Link to="/support">Техподдержка</Link>
-            </li>
-            <li onClick={closeMenu}>
-              <img src="contract.svg" alt="contract" />
-              <Link to="/agreement/offer">Договор оферты</Link>
-            </li>
-            <li onClick={closeMenu}>
-              <img src="document.svg" alt="document" />
-              <Link to="/agreement/service_rules">Правила сервиса</Link>
-            </li>
-            <li onClick={closeMenu}>
-              <img src="checkmark.svg" alt="checkmark" />
-              <Link to="/agreement/warranty">Гарантии</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+              <Link to="/support" className="text-lg" onClick={closeMenu}>
+                Тех поддержка
+              </Link>
+              <Link
+                to="/agreement/offer"
+                className="text-lg"
+                onClick={closeMenu}
+              >
+                Договор оферты
+              </Link>
+              <Link
+                to="/agreement/service_rules"
+                className="text-lg"
+                onClick={closeMenu}
+              >
+                Правила сервиса
+              </Link>
+              <Link
+                to="/agreement/warranty"
+                className="text-lg"
+                onClick={closeMenu}
+              >
+                Гарантии
+              </Link>
+            </nav>
+          </SheetContent>
+        </Sheet>
 
-      {/* Overlay to close menu when clicked outside */}
-      {isMenuOpen && <div className="overlay" onClick={closeMenu}></div>}
+        <h1 className="text-xl font-bold">Sklad4Phone</h1>
+
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={toggleBalanceModal}
+        >
+          <DollarSign className="h-5 w-5 mr-1" />
+          <span className="font-semibold">{user.balance}</span>
+        </div>
+      </header>
 
       {/* Balance Modal */}
       {isBalanceModalOpen && (

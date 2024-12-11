@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Progress } from "../ui/progress";
+
+import { Button } from "../ui/button";
 import CardModal from "./CardModal";
 import CardMembersModal from "./CardMembersModal";
-import "../../styles/Card.css";
 import { deleteSale } from "../../server";
-const Card = ({
+
+const ProductCard = ({
   user,
   admin,
   id,
@@ -24,92 +35,71 @@ const Card = ({
 
   const handleClose = () => {
     setIsModalOpen(false);
-    window.location.reload();
+    window.location.reload(); // Consider using state management instead of reload
   };
 
   const onDelete = async () => {
     await deleteSale(id);
-    window.location.reload();
+    window.location.reload(); // Consider using state management instead of reload
   };
 
-  const toggleMembers = async () => {
+  const toggleMembers = () => {
     setIsMembersModalOpen(!isMembersModalOpen);
   };
 
   const progressPercentage = Math.min(
     100,
-    Math.floor((collected_now / collected_need) * 100),
+    Math.floor((collected_now / collected_need) * 100)
   );
 
   const isCompleted = progressPercentage >= 100;
 
+  // Determine color based on progress
   const color = isCompleted
     ? "gray"
     : progressPercentage >= 70
-      ? "#BBFB4C"
-      : progressPercentage >= 50
-        ? "#E2FF31"
-        : progressPercentage >= 20
-          ? "#5285E8"
-          : "#FF1515";
+    ? "hsl(221.2 83.2% 53.3%)"
+    : progressPercentage >= 50
+    ? "#E2FF31"
+    : progressPercentage >= 20
+    ? "#5285E8"
+    : "#FF1515";
 
   return (
     <>
-      <div
-        className={`card ${isCompleted ? "completed" : ""}`}
-        style={{ order: isCompleted ? 10000 : collected_need - collected_now }}
-      >
-        <img src={images[0]} alt={name} />
-        <div className="info">
-          <div className="text_info">
-            <h4>{name}</h4>
-            <span>{description}</span>
+      <Card className="w-full">
+        <CardContent className="p-0">
+          <img
+            src={images[0]}
+            alt={name}
+            width={400}
+            height={200}
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-4">
+            <h3 className="font-semibold text-lg mb-2">{name}</h3>
+            <p className="text-sm text-muted-foreground mb-2">
+              ${price.toFixed(2)}
+            </p>
+            <Progress value={progressPercentage} className="mb-2" />
+            <p className="text-sm text-muted-foreground">
+              Собрано {collected_now} из {collected_need} шт.
+            </p>
           </div>
-          {!isCompleted && (
-            <button type="button" onClick={handleShow}>
-              {admin ? `Редактировать` : `Подробнее`}
-            </button>
-          )}
-          {isCompleted && admin && (
-            <>
-              <button
-                type="button"
-                className="delete-button"
-                onClick={() => onDelete(id)}
-              >
-                Удалить
-              </button>
-              <button
-                type="button"
-                // className="delete-button"
-                onClick={toggleMembers}
-              >
-                Участники сбора
-              </button>
-            </>
-          )}
-        </div>
-        <div className="price">${price}</div>
-        <div
-          className="process_round"
-          style={{
-            background: `conic-gradient(${color} ${progressPercentage}%, #242424 0)`,
-          }}
-        >
-          <span>
-            {collected_now}/{collected_need}
-          </span>
-        </div>
-      </div>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full" onClick={handleShow}>
+            Подробнее
+          </Button>
+        </CardFooter>
+      </Card>
 
       <CardModal
         user={user}
         isOpen={isModalOpen}
         onClose={handleClose}
         admin={admin}
-        product={{
-          id,
-        }}
+        product={{ id }}
       />
       <CardMembersModal
         sale_id={id}
@@ -120,7 +110,7 @@ const Card = ({
   );
 };
 
-Card.propTypes = {
+ProductCard.propTypes = {
   admin: PropTypes.bool.isRequired,
   id: PropTypes.number.isRequired,
   images: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -131,4 +121,4 @@ Card.propTypes = {
   collected_now: PropTypes.number.isRequired,
 };
 
-export default Card;
+export default ProductCard;

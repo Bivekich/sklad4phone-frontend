@@ -50,12 +50,12 @@ const Agreement = ({ user }) => {
   }, []);
 
   return (
-    <div>
-      <h1>{header}</h1>
-      <br />
-      <b>для приложения sklad4phones_bot</b>
-      <br />
-      <br />
+    <div className="p-5">
+      <h1 className="text-3xl font-bold mb-6 w-fit">{header}</h1>
+      {/* <br /> */}
+      {/* <b>для приложения sklad4phones_bot</b> */}
+      {/* <br />
+      <br /> */}
       {loading ? (
         <p>Загрузка соглашения...</p>
       ) : isEditing && user.admin ? (
@@ -74,7 +74,12 @@ const Agreement = ({ user }) => {
           <button onClick={() => setIsEditing(false)}>Отмена</button>
         </div>
       ) : (
-        <pre style={{ whiteSpace: "pre-wrap" }}>{agreementText}</pre>
+        <div
+          className="text-start prose max-w-none"
+          style={{ whiteSpace: "pre-wrap" }}
+        >
+          {agreementText}
+        </div>
       )}
       {user.admin && !isEditing && (
         <>

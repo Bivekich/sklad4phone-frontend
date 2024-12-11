@@ -5,6 +5,21 @@ import {
   getUserSupportTickets,
   getAllSupportTickets,
 } from "../server";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Textarea } from "../components/ui/textarea";
+import { Button } from "../components/ui/button";
 
 const Support = ({ user }) => {
   const [formData, setFormData] = useState({
@@ -31,8 +46,7 @@ const Support = ({ user }) => {
     fetchTickets();
   }, [user.admin]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (value, name) => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -60,12 +74,29 @@ const Support = ({ user }) => {
 
   return (
     <div className="support">
-      <h3>Тех поддержка</h3>
+      <h1 className="text-3xl font-bold mb-6 w-fit">Техническая поддержка</h1>
 
-      <div className="block_orders">
-        <h4>{user.admin ? "Заявки" : "Мои заявки"}</h4>
-        <span className="count">{ticketCount} заявок</span>
-      </div>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="w-fit">
+            Мои заявки{" "}
+            <span className="text-sm font-normal text-muted-foreground">
+              ({ticketCount})
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {supportTickets.length > 0 && (
+            <div>
+              <h3 className="font-semibold mb-2">Последняя заявка:</h3>
+              <p className="text-sm text-muted-foreground mb-1">
+                Тип: {supportTickets[0].subject}
+              </p>
+              <p>{supportTickets[0].message}</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {user.admin ? (
         <div className="blocks">
@@ -84,48 +115,62 @@ const Support = ({ user }) => {
           )}
         </div>
       ) : (
-        <form onSubmit={handleSubmit}>
-          {supportTickets.length > 0 ? (
-            <div className="block_orders">
-              <h4>Последняя заявка</h4>
-              <div className="ticket">
-                <h5>Тип заявки: {supportTickets[0].subject}</h5>
-                <p>Сообщение: {supportTickets[0].message}</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Создать новую заявку</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Тип заявки
+                </label>
+                <Select
+                  name="type"
+                  onValueChange={(value) => handleInputChange(value, "type")}
+                >
+                  <SelectTrigger id="ticketType">
+                    <SelectValue placeholder="Выберите тип заявки" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Техническая поддержка">
+                      Техническая поддержка
+                    </SelectItem>
+                    <SelectItem value="Вопрос по доставке">
+                      Вопрос по доставке
+                    </SelectItem>
+                    <SelectItem value="Проблема с оплатой">
+                      Проблема с оплатой
+                    </SelectItem>
+                    <SelectItem value="Другое">Другое</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
-          ) : (
-            <p>У вас нет заявок.</p>
-          )}
-
-          <h4>Новая заявка</h4>
-
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleInputChange}
-            className="request-type"
-          >
-            <option value="" disabled>
-              Выберите тип заявки
-            </option>
-            <option value="Техническая поддержка">Техническая поддержка</option>
-            <option value="Вопрос по оплате">Вопрос по оплате</option>
-            <option value="Общий вопрос">Общий вопрос</option>
-          </select>
-
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Опишите вашу проблему или вопрос"
-            rows="4"
-            className="request-description"
-          />
-
-          <button type="submit" className="submit-button">
-            Отправить
-          </button>
-        </form>
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Ваш вопрос
+                </label>
+                <Textarea
+                  id="description"
+                  placeholder="Опишите вашу проблему или задайте вопрос"
+                  value={formData.description}
+                  onChange={(e) =>
+                    handleInputChange(e.target.value, "description")
+                  }
+                  className="text-black"
+                  rows={4}
+                />
+              </div>
+              <Button type="submit">Отправить заявку</Button>
+            </form>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

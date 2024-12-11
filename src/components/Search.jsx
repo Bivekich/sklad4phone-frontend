@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../styles/Search.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { phoneNumberConst } from "../server";
+import { Input } from "./ui/input";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -24,18 +25,15 @@ const Search = () => {
   };
 
   return (
-    <div className="search-container">
+    <div className="search-container mt-6">
       <form onSubmit={handleSearch} className="search">
-        <input
-          type="text"
-          name="search"
-          placeholder="Поиск по товарам"
+        <Input
+          type="search"
+          placeholder="Поиск товаров..."
+          className="mb-6"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button type="submit">
-          <img src="/search.svg" alt="Search" />
-        </button>
       </form>
     </div>
   );

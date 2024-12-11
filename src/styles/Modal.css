@@ -1,234 +1,240 @@
 /* CardModal.css */
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  overflow-y: auto;
 }
 
 .modal-overlay .modal-content {
-    background: #181818;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin: auto 1rem;
+  background: hsl(var(--background));
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: auto 1rem;
 }
 
 .modal-overlay .modal-price {
-    font-size: 1.5rem;
-    margin: 10px 0;
+  font-size: 1.1rem;
+  margin: 10px 0;
 }
 
 .modal-overlay .modal-progress {
-    font-size: 1rem;
-    color: #666;
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    color: #f0f5f4;
-    font-weight: 600;
+  font-size: 1rem;
+  color: #666;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  /* color: #f0f5f4; */
+  font-weight: 600;
 }
 
 .modal-overlay button {
-    padding: 10px 15px;
-    margin-top: 10px;
-    cursor: pointer;
+  padding: 10px 15px;
+  margin-top: 10px;
+  cursor: pointer;
 }
 .modal-overlay .close-button {
-    background: transparent;
-    width: fit-content;
-    margin: 0 0 0 auto;
-    color: #bbfb4c;
-    padding: 0;
+  background: transparent;
+  width: fit-content;
+  margin: 0 0 0 auto;
+  color: hsl(var(--primary));
+  padding: 0;
 }
 
 .modal-overlay img {
-    width: 100%;
+  width: 100%;
 }
 
 .modal-overlay h2 {
-    color: #bbfb4c;
+  color: hsl(var(--primary));
 }
 /* CardModal.css */
 
 /* Customize the range input */
 .modal-overlay .amount-slider {
-    -webkit-appearance: none; /* Remove default styling for WebKit browsers */
-    appearance: none; /* Remove default styling for other browsers */
-    width: 100%; /* Make the slider full width */
-    height: 8px; /* Height of the track */
-    border-radius: 5px; /* Round edges */
-    background: #333; /* Dark gray background color of the track */
-    outline: none; /* Remove outline */
-    margin: 10px 0; /* Add margin */
+  -webkit-appearance: none; /* Remove default styling for WebKit browsers */
+  appearance: none; /* Remove default styling for other browsers */
+  width: 100%; /* Make the slider full width */
+  height: 8px; /* Height of the track */
+  border-radius: 5px; /* Round edges */
+  background: #333; /* Dark gray background color of the track */
+  outline: none; /* Remove outline */
+  margin: 10px 0; /* Add margin */
 }
 
 /* Style the thumb (the draggable part of the slider) */
 .modal-overlay .amount-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Remove default styling for WebKit browsers */
-    appearance: none; /* Remove default styling for other browsers */
-    width: 20px; /* Width of the thumb */
-    height: 20px; /* Height of the thumb */
-    border-radius: 50%; /* Make it round */
-    background: #bbfb4c; /* Accent color of the thumb */
-    transform: translateY(-25%);
-    cursor: pointer; /* Change cursor to pointer on hover */
+  -webkit-appearance: none; /* Remove default styling for WebKit browsers */
+  appearance: none; /* Remove default styling for other browsers */
+  width: 20px; /* Width of the thumb */
+  height: 20px; /* Height of the thumb */
+  border-radius: 50%; /* Make it round */
+  background: hsl(var(--primary)); /* Accent color of the thumb */
+  transform: translateY(-25%);
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 /* Style for Firefox */
 .modal-overlay .amount-slider::-moz-range-thumb {
-    width: 20px; /* Width of the thumb */
-    height: 20px; /* Height of the thumb */
-    border-radius: 50%; /* Make it round */
-    background: #bbfb4c; /* Accent color of the thumb */
-    cursor: pointer; /* Change cursor to pointer on hover */
+  width: 20px; /* Width of the thumb */
+  height: 20px; /* Height of the thumb */
+  border-radius: 50%; /* Make it round */
+  background: hsl(var(--primary)); /* Accent color of the thumb */
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 /* Style the track (the bar under the thumb) for WebKit browsers */
 .modal-overlay .amount-slider::-webkit-slider-runnable-track {
-    height: 8px; /* Height of the track */
-    border-radius: 5px; /* Round edges */
-    background: #333; /* Dark gray background color of the track */
+  height: 8px; /* Height of the track */
+  border-radius: 5px; /* Round edges */
+  background: #333; /* Dark gray background color of the track */
 }
 
 /* Style the track for Firefox */
 .modal-overlay .amount-slider::-moz-range-track {
-    height: 8px; /* Height of the track */
-    border-radius: 5px; /* Round edges */
-    background: #333; /* Dark gray background color of the track */
+  height: 8px; /* Height of the track */
+  border-radius: 5px; /* Round edges */
+  background: #333; /* Dark gray background color of the track */
 }
 
 /* Style for IE */
 .modal-overlay .amount-slider::-ms-track {
-    width: 100%; /* Full width */
-    height: 8px; /* Height of the track */
-    background: transparent; /* Remove background */
-    border-color: transparent; /* Remove border */
-    color: transparent; /* Remove color */
+  width: 100%; /* Full width */
+  height: 8px; /* Height of the track */
+  background: transparent; /* Remove background */
+  border-color: transparent; /* Remove border */
+  color: transparent; /* Remove color */
 }
 
 /* Style the track for IE */
 .modal-overlay .amount-slider::-ms-fill-lower {
-    background: #bbfb4c; /* Accent color for the lower part */
-    border-radius: 5px; /* Round edges */
+  background: hsl(var(--primary)); /* Accent color for the lower part */
+  border-radius: 5px; /* Round edges */
 }
 
 .modal-overlay .amount-slider::-ms-fill-upper {
-    background: #333; /* Dark gray color for the upper part */
-    border-radius: 5px; /* Round edges */
+  background: #333; /* Dark gray color for the upper part */
+  border-radius: 5px; /* Round edges */
 }
 
 /* Style the thumb for IE */
 .modal-overlay .amount-slider::-ms-thumb {
-    width: 20px; /* Width of the thumb */
-    height: 20px; /* Height of the thumb */
-    border-radius: 50%; /* Make it round */
-    background: #bbfb4c; /* Accent color of the thumb */
-    cursor: pointer; /* Change cursor to pointer on hover */
+  width: 20px; /* Width of the thumb */
+  height: 20px; /* Height of the thumb */
+  border-radius: 50%; /* Make it round */
+  background: hsl(var(--primary)); /* Accent color of the thumb */
+  cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 .modal-overlay .two_buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.modal-overlay .two_buttons button {
+  background-color: hsl(var(--background));
+  border: 2px solid hsl(var(--primary));
+  color: hsl(var(--primary));
 }
 
 .modal-overlay .second_button {
-    background: transparent;
-    border: 2px solid #bbfb4c;
-    color: #bbfb4c;
+  background: transparent;
+  border: 2px solid hsl(var(--primary));
+  color: hsl(var(--primary));
 }
 
 .modal-overlay .rating-controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-    width: fit-content;
-    margin: 0rem auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
+  margin: 0rem auto;
 }
 
 .modal-overlay .rating-controls span {
-    font-weight: 600;
+  font-weight: 600;
 }
 .modal-overlay .rating-controls button {
-    width: fit-content;
-    margin: 0;
+  width: fit-content;
+  margin: 0;
 }
 .modal-overlay .raiting > span {
-    font-size: 18px;
-    font-weight: 600;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .modal-overlay .editCardLabel {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: felx;
-    flex-direction: column;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: felx;
+  flex-direction: column;
 }
 
 .modal-overlay .editCardLabel input,
 .modal-overlay .editCardLabel textarea {
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
 .image-carousel {
-    width: 100%;
+  width: 100%;
 }
 
 .carousel-image img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 .modal-overlay .image-slider {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .modal-overlay .image-slider * {
-    margin: 0;
+  margin: 0;
 }
 .modal-overlay .image-slider img {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
 }
 
 .modal-overlay .image-previews {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .modal-overlay .video-container {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .modal-overlay .video-container,
 .modal-overlay .video-container video {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .modal-overlay .historyCard {
-    margin-left: 0;
-    margin-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 }

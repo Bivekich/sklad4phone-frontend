@@ -12,6 +12,7 @@ import Users from "./pages/Users";
 import UserBooking from "./pages/UsersBooking";
 import Notifications from "./pages/Notifications";
 import Agreement from "./pages/Agreement";
+import { ThemeProvider } from "./components/theme-provider";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -39,24 +40,30 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout user={user} />}>
-          <Route path="/" element={<Home user={user} />} />
-          <Route path="/account" element={<Account user={user} />} />
-          <Route path="/support" element={<Support user={user} />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/agreement/:type" element={<Agreement user={user} />} />
-          {user && user.admin && (
-            <>
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/users-booking" element={<UserBooking />} />
-            </>
-          )}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="white" storageKey="vite-ui-theme">
+      {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout user={user} />}>
+            <Route path="/" element={<Home user={user} />} />
+            <Route path="/account" element={<Account user={user} />} />
+            <Route path="/support" element={<Support user={user} />} />
+            <Route path="/history" element={<History />} />
+            <Route
+              path="/agreement/:type"
+              element={<Agreement user={user} />}
+            />
+            {user && user.admin && (
+              <>
+                <Route path="/notifications" element={<Notifications />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/users-booking" element={<UserBooking />} />
+              </>
+            )}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

@@ -7,6 +7,7 @@ import {
   verifyBybitTransaction,
   getCource,
 } from "../server";
+import { Input } from "./ui/input";
 
 const BalanceModal = ({ user, onClose }) => {
   const [amount, setAmount] = useState("");
@@ -35,7 +36,7 @@ const BalanceModal = ({ user, onClose }) => {
     } catch (error) {
       console.error("Ошибка при пополнении баланса:", error);
       alert(
-        "Произошла ошибка при пополнении баланса. Пожалуйста, попробуйте снова.",
+        "Произошла ошибка при пополнении баланса. Пожалуйста, попробуйте снова."
       );
     }
   };
@@ -79,15 +80,14 @@ const BalanceModal = ({ user, onClose }) => {
             Сейчас на счету: ${user.balance} (
             {(Number(user.balance) / course).toFixed(2)}P){" "}
           </h2>
-          <div className="input_rounded_row">
-            <span>Сумма в $:</span>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Введите сумму"
-            />
-          </div>
+
+          <Input
+            type="number"
+            placeholder="Сумма в $:"
+            className="my-6 text-black"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
 
           <div className="two_buttons">
             <button onClick={handleRecharge}>Продолжить</button>
