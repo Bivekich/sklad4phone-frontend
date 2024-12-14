@@ -67,7 +67,7 @@ const ProductCard = ({
 
   return (
     <>
-      <Card className="w-full">
+      <Card className={`w-full ${isCompleted && "hidden"}`}>
         <CardContent className="p-0">
           <img
             src={images[0]}
