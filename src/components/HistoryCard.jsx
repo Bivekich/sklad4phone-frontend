@@ -99,7 +99,7 @@ const HistoryCard = ({ id }) => {
                 {status}
               </Badge>
               <p className="font-medium">
-                ${product.quantity * (product.quantity || 1)}
+                ${product.price * (product.quantity || 1)}
               </p>
             </div>
           </div>
@@ -128,7 +128,7 @@ function CollectionDetails({ collection, status }) {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 items-center gap-4">
             <p className="text-sm font-medium">Предоплата:</p>
-            <p>${collection.quantity * (collection.quantity || 1) * 0.1}</p>
+            <p>${collection.price * (collection.quantity || 1) * 0.1}</p>
           </div>
           <div className="grid grid-cols-2 items-center gap-4">
             <p className="text-sm font-medium">Количество:</p>

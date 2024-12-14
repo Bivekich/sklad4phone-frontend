@@ -136,39 +136,13 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
   const handleBuyFromBalance = async () => {
     const response = await buyForSale(editedProduct.id, selectedAmount);
-    window.location.reload();
     console.log(response);
-  };
-
-  const handleUsdtPayment = async () => {
-    try {
-      setTotal(totalSumm());
-      await createBybitTransaction(total, editedProduct.id);
-      setStep(4);
-    } catch (error) {
-      console.error("Ошибка при оплате USDT:", error);
-      alert("Ошибка при оплате USDT. Пожалуйста, попробуйте снова.");
-    }
+    window.location.reload();
   };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditedProduct((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const nextImage = () => {
-    const minus = editedProduct.video ? 0 : 1;
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex < editedProduct.images.length - minus ? prevIndex + 1 : 0
-    );
-  };
-
-  const prevImage = () => {
-    const minus = editedProduct.video ? 0 : 1;
-
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : editedProduct.images.length - minus
-    );
   };
 
   if (step === 0 && !editMode) {

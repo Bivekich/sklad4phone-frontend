@@ -7,49 +7,54 @@ const History = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const fetchData = async () => {
+    try {
+      const response = await getUserOrders();
+
+      // Создаем массивы для разных статусов
+      const collectedOrders = response.filter(
+        (order) => order.collected_now === order.collected_need
+      );
+      const canceledOrders = response.filter(
+        (order) => order.cancel && order.collected_now !== order.collected_need
+      );
+      const deletedOrders = response.filter(
+        (order) =>
+          order.deleted &&
+          !order.cancel &&
+          order.collected_now !== order.collected_need
+      );
+      const otherOrders = response.filter(
+        (order) =>
+          order.collected_now !== order.collected_need &&
+          !order.cancel &&
+          !order.deleted
+      );
+
+      // Объединяем массивы в нужном порядке
+      const sortedOrders = [
+        ...otherOrders, // Добавляем обычные заказы в начале
+        ...collectedOrders, // Затем добавляем собранные заказы
+        ...canceledOrders, // Затем добавляем отмененные заказы
+        ...deletedOrders, // И в конце добавляем удаленные заказы
+      ];
+
+      setOrders(sortedOrders);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getUserOrders();
+    fetchData(); // Первоначальная загрузка данных
 
-        // Создаем массивы для разных статусов
-        const collectedOrders = response.filter(
-          (order) => order.collected_now === order.collected_need
-        );
-        const canceledOrders = response.filter(
-          (order) =>
-            order.cancel && order.collected_now !== order.collected_need
-        );
-        const deletedOrders = response.filter(
-          (order) =>
-            order.deleted &&
-            !order.cancel &&
-            order.collected_now !== order.collected_need
-        );
-        const otherOrders = response.filter(
-          (order) =>
-            order.collected_now !== order.collected_need &&
-            !order.cancel &&
-            !order.deleted
-        );
+    const intervalId = setInterval(() => {
+      fetchData(); // Обновление данных каждые 5 секунд
+    }, 5000);
 
-        // Объединяем массивы в нужном порядке
-        const sortedOrders = [
-          ...otherOrders, // Добавляем обычные заказы в начале
-          ...collectedOrders, // Затем добавляем собранные заказы
-          ...canceledOrders, // Затем добавляем отмененные заказы
-          ...deletedOrders, // И в конце добавляем удаленные заказы
-        ];
-
-        setOrders(sortedOrders);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    return () => clearInterval(intervalId); // Очистка интервала при размонтировании компонента
   }, []);
 
   if (loading) {
