@@ -61,7 +61,9 @@ const Account = ({ user }) => {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle>{editedUser.first_name}</CardTitle>
+                <CardTitle className="text-start">
+                  {editedUser.first_name}
+                </CardTitle>
                 <p className="text-sm text-muted-foreground">
                   Личная информация
                 </p>
@@ -70,7 +72,7 @@ const Account = ({ user }) => {
             <CardContent>
               <div className="grid gap-2">
                 <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
+                  <User className="h-4 w-4 text-muted-foreground text-start" />
                   <span>{editedUser.first_name}</span>
                 </div>
                 <div className="flex items-center gap-2">

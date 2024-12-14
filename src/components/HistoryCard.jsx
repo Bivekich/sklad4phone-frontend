@@ -113,8 +113,11 @@ const HistoryCard = ({ id }) => {
 function CollectionDetails({ collection, status }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" className="w-full justify-start p-2 text-sm">
+      <DialogTrigger className="mt-1" asChild>
+        <Button
+          variant="ghost"
+          className="w-fit justify-start p-2 text-sm ml-auto"
+        >
           Подробнее
         </Button>
       </DialogTrigger>

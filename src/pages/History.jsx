@@ -27,7 +27,10 @@ const History = () => {
             order.collected_now !== order.collected_need
         );
         const otherOrders = response.filter(
-          (order) => !order.collected_now && !order.cancel && !order.deleted
+          (order) =>
+            order.collected_now !== order.collected_need &&
+            !order.cancel &&
+            !order.deleted
         );
 
         // Объединяем массивы в нужном порядке
@@ -56,6 +59,8 @@ const History = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  console.log("fetched order: ", orders);
 
   return (
     <div>

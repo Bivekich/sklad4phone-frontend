@@ -44,7 +44,11 @@ const Header = ({ user }) => {
               <Link to="/history" className="text-lg" onClick={closeMenu}>
                 История сборов
               </Link>
-              <Link to="/notifications" className="text-lg" onClick={closeMenu}>
+              <Link
+                to="https://t.me/Sklad4Phones_bot"
+                className="text-lg"
+                onClick={closeMenu}
+              >
                 Уведомления
               </Link>
               <Link to="/support" className="text-lg" onClick={closeMenu}>
