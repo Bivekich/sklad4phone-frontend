@@ -73,14 +73,16 @@ const Support = ({ user }) => {
   };
 
   return (
-    <div className="support">
-      <h1 className="text-3xl font-bold mb-6 w-fit">Техническая поддержка</h1>
+    <div className="text-start support">
+      <h1 className="text-start text-3xl font-bold mb-6 w-fit">
+        Техническая поддержка
+      </h1>
 
-      <Card className="mb-6">
+      <Card className="text-start mb-6">
         <CardHeader>
-          <CardTitle className="w-fit">
+          <CardTitle className="text-start w-fit">
             Мои заявки{" "}
-            <span className="text-sm font-normal text-muted-foreground">
+            <span className="text-start text-sm font-normal text-muted-foreground">
               ({ticketCount})
             </span>
           </CardTitle>
@@ -88,8 +90,10 @@ const Support = ({ user }) => {
         <CardContent>
           {supportTickets.length > 0 && (
             <div>
-              <h3 className="font-semibold mb-2">Последняя заявка:</h3>
-              <p className="text-sm text-muted-foreground mb-1">
+              <h3 className="text-start font-semibold mb-2">
+                Последняя заявка:
+              </h3>
+              <p className="text-start text-sm text-muted-foreground mb-1">
                 Тип: {supportTickets[0].subject}
               </p>
               <p>{supportTickets[0].message}</p>
@@ -99,12 +103,12 @@ const Support = ({ user }) => {
       </Card>
 
       {user.admin ? (
-        <div className="blocks">
+        <div className="text-start blocks">
           {supportTickets.length > 0 ? (
             supportTickets.map((item) => (
-              <div className="block_orders" key={item.id}>
+              <div className="text-start block_orders" key={item.id}>
                 <h4>Заявка #{item.id}</h4>
-                <div className="ticket">
+                <div className="text-start ticket">
                   <h5>Тип заявки: {item.subject}</h5>
                   <p>Сообщение: {item.message}</p>
                 </div>
@@ -120,11 +124,11 @@ const Support = ({ user }) => {
             <CardTitle>Создать новую заявку</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="text-start space-y-4">
               <div>
                 <label
                   htmlFor="type"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="text-start block text-sm font-medium text-gray-700 mb-1"
                 >
                   Тип заявки
                 </label>
@@ -152,7 +156,7 @@ const Support = ({ user }) => {
               <div>
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700 mb-1"
+                  className="text-start block text-sm font-medium text-gray-700 mb-1"
                 >
                   Ваш вопрос
                 </label>
@@ -163,7 +167,7 @@ const Support = ({ user }) => {
                   onChange={(e) =>
                     handleInputChange(e.target.value, "description")
                   }
-                  className="text-black"
+                  className="text-start text-black"
                   rows={4}
                 />
               </div>

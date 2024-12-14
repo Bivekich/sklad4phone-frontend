@@ -8,6 +8,7 @@ import {
   getCource,
 } from "../server";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 const BalanceModal = ({ user, onClose }) => {
   const [amount, setAmount] = useState("");
@@ -89,9 +90,11 @@ const BalanceModal = ({ user, onClose }) => {
             onChange={(e) => setAmount(e.target.value)}
           />
 
-          <div className="two_buttons">
-            <button onClick={handleRecharge}>Продолжить</button>
-          </div>
+          {/* <div className="two_buttons"> */}
+          <Button className="w-full" onClick={handleRecharge}>
+            Продолжить
+          </Button>
+          {/* </div>å */}
         </div>
       </div>
     );
@@ -110,11 +113,13 @@ const BalanceModal = ({ user, onClose }) => {
             На сумму: ${Number(amount)} ({(Number(amount) / course).toFixed(2)}
             P)
           </p>
-          <div className="two_buttons">
-            <button onClick={handlePay}>Наличными</button>
-          </div>
-          <div className="two_buttons">
-            <button onClick={handleUsdtPayment}>Оплатить с USDT</button>
+          <div className="grid grid-cols-2 gap-2">
+            <Button className="w-full" onClick={handlePay}>
+              Наличными
+            </Button>
+            <Button className="w-full" onClick={handleUsdtPayment}>
+              Оплатить с USDT
+            </Button>
           </div>
         </div>
       </div>
@@ -159,7 +164,9 @@ const BalanceModal = ({ user, onClose }) => {
           <img src="qr.jpg" alt="" />
 
           <div className="two_buttons">
-            <button onClick={handleConfirmPayment}>Я отправил платеж</button>
+            <Button className="w-full" onClick={handleConfirmPayment}>
+              Я отправил платеж
+            </Button>
           </div>
         </div>
       </div>

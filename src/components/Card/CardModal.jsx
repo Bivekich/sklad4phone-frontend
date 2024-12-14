@@ -217,7 +217,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <h1 className="text-start text-5xl my-2 font-semibold">
+          <h1 className="text-start text-3xl my-2 font-semibold">
             {editedProduct.name}
           </h1>
           <p className="text-start ">{editedProduct.description}</p>
