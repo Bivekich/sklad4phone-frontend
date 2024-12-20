@@ -148,8 +148,12 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 0 && !editMode) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content relative">
+          <button
+            className="float-right absolute top-0 right-0 text-2xl text-white z-10"
+            style={{ padding: 0, paddingRight: "1rem" }}
+            onClick={onClose}
+          >
             &#215;
           </button>
 
@@ -191,87 +195,91 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <h1 className="text-start text-3xl my-2 font-semibold">
-            {editedProduct.name}
-          </h1>
-          <p className="text-start ">{editedProduct.description}</p>
-          <p className="modal-price text-start font-medium">Количество: </p>
-          <div className="modal-progress">
-            <span>1</span>
-            <span>
-              {editedProduct.collected_need - editedProduct.collected_now}
-            </span>
-          </div>
+          <div className="p-5">
+            <h1 className="text-start text-3xl my-2 font-semibold">
+              {editedProduct.name}
+            </h1>
+            <p className="text-start ">{editedProduct.description}</p>
+            <p className="modal-price text-start font-medium">Количество: </p>
+            <div className="modal-progress">
+              <span>1</span>
+              <span>
+                {editedProduct.collected_need - editedProduct.collected_now}
+              </span>
+            </div>
 
-          <div className="slider-container">
-            <input
-              type="range"
-              min="1"
-              max={editedProduct.collected_need - editedProduct.collected_now}
-              value={selectedAmount}
-              onChange={handleSliderChange}
-              className="amount-slider"
-            />
-          </div>
-          <p className="modal-price text-start font-medium">
-            Выбрано: {selectedAmount} шт
-          </p>
+            <div className="slider-container">
+              <input
+                type="range"
+                min="1"
+                max={editedProduct.collected_need - editedProduct.collected_now}
+                value={selectedAmount}
+                onChange={handleSliderChange}
+                className="amount-slider"
+              />
+            </div>
+            <p className="modal-price text-start font-medium">
+              Выбрано: {selectedAmount} шт
+            </p>
 
-          {/* <div className="modal-price ml-0">
+            {/* <div className="modal-price ml-0">
             Сейчас на счету: ${user.balance} (
             {(Number(user.balance) / course).toFixed(2)}P)
           </div> */}
-          <div className="modal-price text-start">
-            В наличии:{" "}
-            {editedProduct.collected_need - editedProduct.collected_now} шт
-          </div>
-          <div className="modal-price text-start font-semibold">
-            Сумма: ${editedProduct.price * selectedAmount} (
-            {(Number(editedProduct.price * selectedAmount) / course).toFixed(2)}
-            P)
-          </div>
-          <div className="modal-price text-start">
-            Предоплата: ${editedProduct.price * selectedAmount * 0.1}(
-            {(
-              Number(editedProduct.price * selectedAmount * 0.1) / course
-            ).toFixed(2)}
-            P)
-          </div>
-          {admin ? (
-            <>
-              <button onClick={() => setEditMode(true)}>Редактировать</button>
-              <button onClick={handleCancel}>Отменить сбор</button>
-              <button onClick={handleDelete}>Удалить</button>
-              <button onClick={onClose}>Готово</button>
-              <br />
-              <br />
-              {users.length > 0 ? (
-                users.map((user) => (
-                  <>
-                    <UserMember
-                      key={user.id} // Ensure to use a unique key
-                      admin={user.admin}
-                      quantity={user.quantity}
-                      balance={user.balance}
-                      first_name={user.first_name}
-                      id={user.id}
-                      phone_number={user.phone_number}
-                      raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
-                    />
-                    <br />
-                  </>
-                ))
-              ) : (
-                <p>Пользователей не найдено.</p> // Message when no users are available
+            {/* <div className="modal-price text-start">
+              В наличии:{" "}
+              {editedProduct.collected_need - editedProduct.collected_now} шт
+            </div> */}
+            <div className="modal-price text-start font-semibold">
+              Сумма: ${editedProduct.price * selectedAmount} (
+              {(Number(editedProduct.price * selectedAmount) / course).toFixed(
+                2
               )}
-            </>
-          ) : (
-            <>
-              <Button className="w-full" onClick={handleNextStep}>
-                Забронировать
-              </Button>
-            </>
-          )}
+              P)
+            </div>
+            <div className="modal-price text-start">
+              Предоплата: ${editedProduct.price * selectedAmount * 0.1}(
+              {(
+                Number(editedProduct.price * selectedAmount * 0.1) / course
+              ).toFixed(2)}
+              P)
+            </div>
+            {admin ? (
+              <>
+                <button onClick={() => setEditMode(true)}>Редактировать</button>
+                <button onClick={handleCancel}>Отменить сбор</button>
+                <button onClick={handleDelete}>Удалить</button>
+                <button onClick={onClose}>Готово</button>
+                <br />
+                <br />
+                {users.length > 0 ? (
+                  users.map((user) => (
+                    <>
+                      <UserMember
+                        key={user.id} // Ensure to use a unique key
+                        admin={user.admin}
+                        quantity={user.quantity}
+                        balance={user.balance}
+                        first_name={user.first_name}
+                        id={user.id}
+                        phone_number={user.phone_number}
+                        raiting={(parseFloat(user.raiting) || 0).toFixed(1)}
+                      />
+                      <br />
+                    </>
+                  ))
+                ) : (
+                  <p>Пользователей не найдено.</p> // Message when no users are available
+                )}
+              </>
+            ) : (
+              <>
+                <Button className="w-full" onClick={handleNextStep}>
+                  Забронировать
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     );

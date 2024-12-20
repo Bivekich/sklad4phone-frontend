@@ -9,6 +9,7 @@ import {
 } from "../server";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 const BalanceModal = ({ user, onClose }) => {
   const [amount, setAmount] = useState("");
@@ -140,8 +141,13 @@ const BalanceModal = ({ user, onClose }) => {
           </p>
           <h2>
             В телеграм:{" "}
-            <a href="https://t.me/manager_kazaka">@manager_kazaka</a>
+            <Link to="https://t.me/manager_kazaka">@manager_kazaka</Link>
           </h2>
+          <Link to="https://t.me/manager_kazaka">
+            <Button className="w-full" onClick={handleConfirmPayment}>
+              Перейти в телеграм
+            </Button>
+          </Link>
         </div>
       </div>
     );

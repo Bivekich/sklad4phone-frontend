@@ -16,12 +16,16 @@
 
 .modal-overlay .modal-content {
   background: hsl(var(--background));
-  padding: 20px;
+  /* padding: 20px; */
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin: auto 1rem;
+}
+
+.modal-overlay .modal-content .swiper {
+  border-radius: 8px 8px 0 0;
 }
 
 .modal-overlay .modal-price {

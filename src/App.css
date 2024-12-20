@@ -37,6 +37,10 @@ button:focus {
   outline: none;
 }
 
+a {
+  text-decoration: underline;
+}
+
 .primary_text_color {
   color: hsl(var(--primary));
 }
