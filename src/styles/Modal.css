@@ -51,7 +51,7 @@
 .modal-overlay .close-button {
   background: transparent;
   width: fit-content;
-  margin: 0 0 0 auto;
+  margin: 0 1rem 0 auto;
   color: hsl(var(--primary));
   padding: 0;
 }

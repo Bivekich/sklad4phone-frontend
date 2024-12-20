@@ -157,30 +157,6 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             &#215;
           </button>
 
-          {/* <div className="image-slider">
-            {0 === currentImageIndex && editedProduct.video ? (
-              editedProduct.video && (
-                <div className="video-container">
-                  <video controls src={editedProduct.video} />
-                </div>
-              )
-            ) : (
-              <img
-                src={
-                  editedProduct.images[
-                    currentImageIndex - (editedProduct.video ? 1 : 0)
-                  ]
-                }
-                alt={editedProduct.name}
-              />
-            )}
-
-            <div className="two_buttons">
-              <button onClick={prevImage}>&#10094;</button>
-              <button onClick={nextImage}>&#10095;</button>
-            </div>
-          </div> */}
-
           <Swiper className="image-slider">
             {editedProduct.video && (
               <SwiperSlide>
@@ -289,7 +265,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (editMode) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-5">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -371,7 +347,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 1) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-5">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -398,7 +374,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           </>
         ) : (
           <div className="modal-overlay">
-            <div className="modal-content">
+            <div className="modal-content p-5">
               <button className="close-button" onClick={onClose}>
                 &#215;
               </button>
@@ -435,7 +411,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 3) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-5">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -459,7 +435,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 4) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-5">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>

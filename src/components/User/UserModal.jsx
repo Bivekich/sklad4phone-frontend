@@ -26,19 +26,19 @@ const UserModal = ({ isOpen, onClose, user }) => {
       const response = await getUserOrders(user.phone_number);
       // Создаем массивы для разных статусов
       const collectedOrders = response.filter(
-        (order) => order.collected_now === order.collected_need,
+        (order) => order.collected_now === order.collected_need
       );
       const canceledOrders = response.filter(
-        (order) => order.cancel && order.collected_now !== order.collected_need,
+        (order) => order.cancel && order.collected_now !== order.collected_need
       );
       const deletedOrders = response.filter(
         (order) =>
           order.deleted &&
           !order.cancel &&
-          order.collected_now !== order.collected_need,
+          order.collected_now !== order.collected_need
       );
       const otherOrders = response.filter(
-        (order) => !order.collected_now && !order.cancel && !order.deleted,
+        (order) => !order.collected_now && !order.cancel && !order.deleted
       );
 
       // Объединяем массивы в нужном порядке
@@ -83,7 +83,7 @@ const UserModal = ({ isOpen, onClose, user }) => {
       if (oldBalance !== editedUser.balance) {
         await createLog(
           `Баланс изменен с $${oldBalance} на $${editedUser.balance}`,
-          editedUser.phone_number,
+          editedUser.phone_number
         );
         // alert(`Баланс изменен с $${oldBalance} на $${editedUser.balance}`); // Send notification
       }
@@ -146,32 +146,13 @@ const UserModal = ({ isOpen, onClose, user }) => {
             </span>
           )}
         </div>
-        <div className="input_rounded_row">
+        <div className="flex flex-col gap-2">
           <span>Баланс:</span>
           <input
             type="number"
             name="balance"
+            className="w-30 mx-auto text-black bg-white rounded-xl p-2 border-2"
             value={editedUser.balance}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
-          />
-        </div>
-        <div className="input_rounded_row">
-          <span>Имя:</span>
-          <input
-            type="text"
-            name="first_name"
-            value={editedUser.first_name}
-            onChange={handleInputChange}
-            readOnly={!isEditing}
-          />
-        </div>
-        <div className="input_rounded_row">
-          <span>Мобильный телефон:</span>
-          <input
-            type="text"
-            name="phone_number"
-            value={editedUser.phone_number}
             onChange={handleInputChange}
             readOnly={!isEditing}
           />

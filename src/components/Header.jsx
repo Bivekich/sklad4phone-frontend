@@ -35,42 +35,54 @@ const Header = ({ user }) => {
           <SheetContent side="left" className="w-[300px] sm:w-[400px]">
             <UserInfo name={user.first_name} id={user.id} />
             <nav className="flex flex-col space-y-4">
-              <Link to="/" className="text-lg" onClick={closeMenu}>
+              <Link to="/" className="text-lg no-underline" onClick={closeMenu}>
                 Главная
               </Link>
-              <Link to="/account" className="text-lg" onClick={closeMenu}>
+              <Link
+                to="/account"
+                className="text-lg no-underline"
+                onClick={closeMenu}
+              >
                 Мой профиль
               </Link>
-              <Link to="/history" className="text-lg" onClick={closeMenu}>
+              <Link
+                to="/history"
+                className="text-lg no-underline"
+                onClick={closeMenu}
+              >
                 История сборов
               </Link>
               <Link
                 to="https://t.me/Sklad4Phones_bot"
-                className="text-lg"
+                className="text-lg no-underline"
                 onClick={closeMenu}
               >
                 Уведомления
               </Link>
-              <Link to="/support" className="text-lg" onClick={closeMenu}>
+              <Link
+                to="/support"
+                className="text-lg no-underline"
+                onClick={closeMenu}
+              >
                 Тех поддержка
               </Link>
               <Link
                 to="/agreement/offer"
-                className="text-lg"
+                className="text-lg no-underline"
                 onClick={closeMenu}
               >
                 Договор оферты
               </Link>
               <Link
                 to="/agreement/service_rules"
-                className="text-lg"
+                className="text-lg no-underline"
                 onClick={closeMenu}
               >
                 Правила сервиса
               </Link>
               <Link
                 to="/agreement/warranty"
-                className="text-lg"
+                className="text-lg no-underline"
                 onClick={closeMenu}
               >
                 Гарантии
