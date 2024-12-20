@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import "../../styles/Modal.css";
-import { createSale } from "../../server"; // Ensure createSale endpoint handles file upload
+import { createSale } from "../../server";
 
 const CreateCard = ({ isOpen, onClose }) => {
   const [newProduct, setNewProduct] = useState({
@@ -13,8 +13,9 @@ const CreateCard = ({ isOpen, onClose }) => {
   });
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const [video, setVideo] = useState(null); // Single video file
-  const [videoPreview, setVideoPreview] = useState(null); // Video preview
+  const [video, setVideo] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
+  const [dragActive, setDragActive] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,11 +32,37 @@ const CreateCard = ({ isOpen, onClose }) => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setImages(files);
+    e.preventDefault();
+    const files = e.target.files;
+    handleFiles(files);
+  };
 
-    const filePreviews = files.map((file) => URL.createObjectURL(file));
-    setPreviews(filePreviews);
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFiles(e.dataTransfer.files);
+    }
+  };
+
+  const handleFiles = (files) => {
+    const filesArray = Array.from(files);
+    setImages((prev) => [...prev, ...filesArray]);
+
+    const newPreviews = filesArray.map((file) => URL.createObjectURL(file));
+    setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
   const handleVideoChange = (e) => {
@@ -94,7 +121,7 @@ const CreateCard = ({ isOpen, onClose }) => {
     } catch (error) {
       console.error("Ошибка при создании нового сбора:", error);
       alert(
-        "Произошла ошибка при создании нового сбора. Пожалуйста, попробуйте снова.",
+        "Произошла ошибка при создании нового сбора. Пожалуйста, попробуйте снова."
       );
     }
   };
@@ -158,15 +185,31 @@ const CreateCard = ({ isOpen, onClose }) => {
               required
             />
           </label>
-          <label className="editCardLabel">
-            Фото:
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-              required
-            />
+
+          <div className="editCardLabel">
+            <span>Фото:</span>
+            <div
+              className={`drag-drop-zone ${dragActive ? "drag-active" : ""}`}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+                id="image-input"
+              />
+              <label htmlFor="image-input" className="upload-label">
+                <div className="drag-drop-content h-40 flex items-center justify-center border border-dashed border-gray-300 rounded-md mx-5 mb-5">
+                  <p>Нажмите для выбора фото</p>
+                </div>
+              </label>
+            </div>
+
             <div className="image-previews">
               {previews.map((preview, index) => (
                 <div key={index} className="image-preview-container">
@@ -184,7 +227,8 @@ const CreateCard = ({ isOpen, onClose }) => {
                 </div>
               ))}
             </div>
-          </label>
+          </div>
+
           <label className="editCardLabel">
             Видео:
             <input type="file" accept="video/*" onChange={handleVideoChange} />
