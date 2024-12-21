@@ -67,7 +67,10 @@ const ProductCard = ({
 
   return (
     <>
-      <Card className={`w-full ${isCompleted && "hidden"}`}>
+      <Card
+        className={`w-full ${isCompleted && "hidden"}`}
+        style={{ order: collected_need - collected_now }}
+      >
         <CardContent className="p-0">
           <img
             src={images[0]}
