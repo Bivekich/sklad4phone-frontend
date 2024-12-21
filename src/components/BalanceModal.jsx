@@ -73,7 +73,7 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 0) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-3">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -105,7 +105,7 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 1) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-3">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -131,7 +131,7 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 3) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-3">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>
@@ -157,7 +157,7 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 4) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content">
+        <div className="modal-content p-3">
           <button className="close-button" onClick={onClose}>
             &#215;
           </button>

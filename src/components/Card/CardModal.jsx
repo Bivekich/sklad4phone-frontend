@@ -150,8 +150,8 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
       <div className="modal-overlay">
         <div className="modal-content relative">
           <button
-            className="float-right absolute top-0 right-0 text-2xl text-white z-10"
-            style={{ padding: 0, paddingRight: "1rem" }}
+            className="bg-primary rounded-full float-right absolute top-0 right-2 text-2xl text-white leading-none p-2 z-10"
+            // style={{ padding: 0, paddingRight: "1rem" }}
             onClick={onClose}
           >
             &#215;
@@ -160,8 +160,15 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           <Swiper className="image-slider">
             {editedProduct.video && (
               <SwiperSlide>
-                <div className="video-container">
-                  <video controls src={editedProduct.video} />
+                <div
+                  className="video-container w-full h-full"
+                  style={{ margin: 0 }}
+                >
+                  <video
+                    className="w-full h-full"
+                    controls
+                    src={editedProduct.video}
+                  />
                 </div>
               </SwiperSlide>
             )}
