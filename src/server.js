@@ -1,10 +1,10 @@
-import axios from "axios";
-import * as cheerio from "cheerio";
+import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 const baseURL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://api.sklad4phone.ru";
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : 'http://193.168.3.81:3001';
 
 // const baseURL = "https://api.sklad4phone.ru";
 
@@ -14,15 +14,15 @@ const axiosInstance = axios.create({
 });
 
 const urlParams = new URLSearchParams(window.location.search);
-export const phoneNumberConst = urlParams.get("phoneNumber");
+export const phoneNumberConst = urlParams.get('phoneNumber');
 
 const handleAxiosError = (error) => {
   if (error.response) {
-    console.error("Error:", error.response.data.message);
+    console.error('Error:', error.response.data.message);
   } else if (error.request) {
-    console.error("No response from server:", error.request);
+    console.error('No response from server:', error.request);
   } else {
-    console.error("Error", error.message);
+    console.error('Error', error.message);
   }
 };
 
@@ -32,7 +32,7 @@ export const getUserByPhoneNumber = async (phoneNumber = phoneNumberConst) => {
       params: { phoneNumber }, // Pass phoneNumber as a query parameter
     });
 
-    console.log("User data:", response.data);
+    console.log('User data:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -46,7 +46,7 @@ export const updateUserById = async (id, updateData) => {
       params: { id }, // Pass ID as a query parameter
     });
 
-    console.log("Updated user data:", response.data);
+    console.log('Updated user data:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -59,7 +59,7 @@ export const getAllUsers = async () => {
   try {
     const response = await axiosInstance.get(`/users`); // Make GET request to /users endpoint
 
-    console.log("All users data:", response.data);
+    console.log('All users data:', response.data);
     return response.data; // Return the list of users
   } catch (error) {
     handleAxiosError(error); // Handle any errors
@@ -70,12 +70,12 @@ export const getAllUsers = async () => {
 // Function to create a new sale
 export const createSale = async (saleData) => {
   try {
-    const response = await axiosInstance.post("/sales/create", saleData, {
+    const response = await axiosInstance.post('/sales/create', saleData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     });
-    console.log("Sale created:", response.data);
+    console.log('Sale created:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -86,8 +86,8 @@ export const createSale = async (saleData) => {
 // Function to get all sales
 export const getAllSales = async () => {
   try {
-    const response = await axiosInstance.get("/sales");
-    console.log("All sales data:", response.data);
+    const response = await axiosInstance.get('/sales');
+    console.log('All sales data:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -99,7 +99,7 @@ export const getAllSales = async () => {
 export const getSaleById = async (id) => {
   try {
     const response = await axiosInstance.get(`/sales/${id}`);
-    console.log("Sale data by ID:", response.data);
+    console.log('Sale data by ID:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -110,7 +110,7 @@ export const getSaleById = async (id) => {
 export const getSaleInHistoryById = async (id) => {
   try {
     const response = await axiosInstance.get(`/sales/${id}/history`);
-    console.log("HistorySale data by ID:", response.data);
+    console.log('HistorySale data by ID:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -120,11 +120,11 @@ export const getSaleInHistoryById = async (id) => {
 
 export const createLog = async (message, phone = phoneNumberConst) => {
   try {
-    const response = await axiosInstance.post("/logs/", {
+    const response = await axiosInstance.post('/logs/', {
       phoneNumber: phone,
       action: message,
     });
-    console.log("HistorySale data by ID:", response.data);
+    console.log('HistorySale data by ID:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -135,7 +135,7 @@ export const createLog = async (message, phone = phoneNumberConst) => {
 export const getAllUserLogs = async (id) => {
   try {
     const response = await axiosInstance.get(`/logs/${id}`);
-    console.log("HistorySale data by ID:", response.data);
+    console.log('HistorySale data by ID:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -147,7 +147,7 @@ export const getAllUserLogs = async (id) => {
 export const updateSale = async (id, updateData) => {
   try {
     const response = await axiosInstance.put(`/sales/${id}`, updateData);
-    console.log("Updated sale data:", response.data);
+    console.log('Updated sale data:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -159,7 +159,7 @@ export const updateSale = async (id, updateData) => {
 export const deleteSale = async (id) => {
   try {
     const response = await axiosInstance.delete(`/sales/${id}`);
-    console.log("Sale deleted:", response.data);
+    console.log('Sale deleted:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -173,14 +173,14 @@ export const buyForSale = async (id, quantity) => {
       quantity,
       phoneNumber: phoneNumberConst,
     });
-    alert("Сбор успешно оплачен!");
-    console.log("Sale purchased:", response.data);
+    alert('Сбор успешно оплачен!');
+    console.log('Sale purchased:', response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 400) {
       // Check if the error message indicates insufficient funds
-      if (error.response.data.message === "Insufficient balance") {
-        alert("У вас не достаточно средств на счёте.");
+      if (error.response.data.message === 'Insufficient balance') {
+        alert('У вас не достаточно средств на счёте.');
       }
     }
     handleAxiosError(error);
@@ -191,7 +191,7 @@ export const buyForSale = async (id, quantity) => {
 export const calcelSale = async (id) => {
   try {
     const response = await axiosInstance.post(`/sales/${id}/cancel`);
-    console.log("Sale calcelled:", response.data);
+    console.log('Sale calcelled:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -202,11 +202,11 @@ export const calcelSale = async (id) => {
 export const getUserOrders = async (phone = phoneNumberConst) => {
   try {
     const response = await axiosInstance.get(`/sales/userorders/${phone}`);
-    console.log("User orders retrieved:", response.data);
+    console.log('User orders retrieved:', response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      alert("Пользователь с таким номером телефона не найден.");
+      alert('Пользователь с таким номером телефона не найден.');
     }
     handleAxiosError(error);
     throw error;
@@ -215,11 +215,11 @@ export const getUserOrders = async (phone = phoneNumberConst) => {
 export const getOrderUsers = async (sale_id) => {
   try {
     const response = await axiosInstance.get(`/sales/getOrderUsers/${sale_id}`);
-    console.log("User orders retrieved:", response.data);
+    console.log('User orders retrieved:', response.data);
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      alert("Данного сбора не найдено");
+      alert('Данного сбора не найдено');
     }
     handleAxiosError(error);
     throw error;
@@ -229,12 +229,12 @@ export const getOrderUsers = async (sale_id) => {
 // Function to create a new support ticket
 export const createSupportTicket = async (supportData) => {
   try {
-    const response = await axiosInstance.post("/support", {
+    const response = await axiosInstance.post('/support', {
       subject: supportData.subject,
       message: supportData.message,
       phoneNumber: phoneNumberConst,
     });
-    console.log("Support ticket created:", response.data);
+    console.log('Support ticket created:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -245,8 +245,8 @@ export const createSupportTicket = async (supportData) => {
 // Function to get all support tickets
 export const getAllSupportTickets = async () => {
   try {
-    const response = await axiosInstance.get("/support/");
-    console.log("All support tickets:", response.data);
+    const response = await axiosInstance.get('/support/');
+    console.log('All support tickets:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -258,7 +258,7 @@ export const getAllSupportTickets = async () => {
 export const getUserSupportTickets = async () => {
   try {
     const response = await axiosInstance.get(`/support/${phoneNumberConst}`);
-    console.log("Support ticket data:", response.data);
+    console.log('Support ticket data:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -273,7 +273,7 @@ export const updateSupportTicket = async (id, updateData) => {
       `/support/tickets/${id}`,
       updateData
     );
-    console.log("Updated support ticket:", response.data);
+    console.log('Updated support ticket:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -285,7 +285,7 @@ export const updateSupportTicket = async (id, updateData) => {
 export const deleteSupportTicket = async (id) => {
   try {
     const response = await axiosInstance.delete(`/support/tickets/${id}`);
-    console.log("Support ticket deleted:", response.data);
+    console.log('Support ticket deleted:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -302,7 +302,7 @@ export const updateSupportTicketStatus = async (id, status) => {
         status,
       }
     );
-    console.log("Updated support ticket status:", response.data);
+    console.log('Updated support ticket status:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -313,8 +313,8 @@ export const updateSupportTicketStatus = async (id, status) => {
 // Function to get all transactions
 export const getAllTransactions = async () => {
   try {
-    const response = await axiosInstance.get("/transactions");
-    console.log("All transactions:", response.data);
+    const response = await axiosInstance.get('/transactions');
+    console.log('All transactions:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -337,12 +337,12 @@ export const getTransactionById = async (id) => {
 // Function to create a new transaction
 export const createTransaction = async (amount, saleId = null) => {
   try {
-    const response = await axiosInstance.post("/transactions", {
+    const response = await axiosInstance.post('/transactions', {
       phoneNumber: phoneNumberConst,
       amount,
       saleId,
     });
-    console.log("Created transaction:", response.data);
+    console.log('Created transaction:', response.data);
     return response.data;
   } catch (error) {
     handleAxiosError(error);
@@ -370,7 +370,7 @@ export const updateTransactionStatus = async (id, paid = false) => {
 // Function to send a notification to a user
 export const sendNotification = async (message) => {
   try {
-    const response = await axiosInstance.post("/notifications/send", {
+    const response = await axiosInstance.post('/notifications/send', {
       phoneNumber: phoneNumberConst,
       message,
     });
@@ -397,7 +397,7 @@ export const createBybitTransaction = async (
     );
     return response.data; // Returns the created transaction details
   } catch (error) {
-    console.error("Error creating transaction:", error);
+    console.error('Error creating transaction:', error);
     throw error;
   }
 };
@@ -413,7 +413,7 @@ export const verifyBybitTransaction = async (saleId = null) => {
     );
     return response.data; // Returns verification result and balance
   } catch (error) {
-    console.error("Error verifying transaction:", error);
+    console.error('Error verifying transaction:', error);
     throw error;
   }
 };
@@ -436,13 +436,13 @@ export const verifyBybitTransaction = async (saleId = null) => {
 
 export const getCource = async () => {
   try {
-    const response = await axiosInstance.get("/sales/getCource");
+    const response = await axiosInstance.get('/sales/getCource');
 
-    console.log("cource");
+    console.log('cource');
     console.log(response);
     return 1 / response.data.price;
   } catch (error) {
-    console.error("Произошла ошибка при получении данных:", error);
+    console.error('Произошла ошибка при получении данных:', error);
   }
 };
 
@@ -473,34 +473,34 @@ export const getCource = async () => {
 export const broadcastNotification = async (formData) => {
   try {
     // Optional: Check if formData contains message and files before sending
-    if (!formData.get("message")) {
-      alert("Сообщение не может быть пустым!");
+    if (!formData.get('message')) {
+      alert('Сообщение не может быть пустым!');
       return;
     }
     // Send POST request to backend `/broadcast` endpoint
     const response = await axiosInstance.post(
-      "/notifications/broadcast",
+      '/notifications/broadcast',
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data", // Ensure it's multipart/form-data
+          'Content-Type': 'multipart/form-data', // Ensure it's multipart/form-data
         },
       }
     );
 
-    console.log("Broadcast sent successfully:", response.data);
+    console.log('Broadcast sent successfully:', response.data);
     // alert("Сообщение успешно отправлено!");
     return response.data;
   } catch (error) {
     if (error.response) {
-      console.error("Server responded with error:", error.response.data);
+      console.error('Server responded with error:', error.response.data);
       alert(
-        "Ошибка при отправке сообщения: " + error.response.data.message ||
-          "Неизвестная ошибка."
+        'Ошибка при отправке сообщения: ' + error.response.data.message ||
+          'Неизвестная ошибка.'
       );
     } else {
-      console.error("Error sending broadcast notification:", error.message);
-      alert("Ошибка при отправке сообщения.");
+      console.error('Error sending broadcast notification:', error.message);
+      alert('Ошибка при отправке сообщения.');
     }
     throw error;
   }
