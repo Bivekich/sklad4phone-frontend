@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import "../../styles/Modal.css"; // Ensure you have appropriate styles for the modal
-import UserMember from "../User/UserMember"; // Import the User component
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import '../../styles/Modal.css'; // Ensure you have appropriate styles for the modal
+import UserMember from '../User/UserMember'; // Import the User component
+import { Swiper, SwiperSlide } from 'swiper/react';
 import {
   buyForSale,
   deleteSale,
@@ -14,13 +14,13 @@ import {
   calcelSale,
   getSaleById,
   getOrderUsers,
-} from "../../server";
-import BalanceModal from "../BalanceModal";
-import { Link } from "react-router-dom";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Button } from "../ui/button";
+} from '../../server';
+import BalanceModal from '../BalanceModal';
+import { Link } from 'react-router-dom';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Button } from '../ui/button';
 
 const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const [selectedAmount, setSelectedAmount] = useState(1);
@@ -88,9 +88,9 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   const handleConfirmPayment = async () => {
     const response = await verifyBybitTransaction(editedProduct.id);
     if (response) {
-      alert("Покупка успешно подтверждена");
+      alert('Покупка успешно подтверждена');
     } else {
-      alert("Процесс перевода средств ещё не окончился");
+      alert('Процесс перевода средств ещё не окончился');
     }
   };
 
@@ -103,7 +103,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
   const handleDelete = async () => {
     await deleteSale(editedProduct.id);
-    alert("Сбор успешно удален!");
+    alert('Сбор успешно удален!');
 
     window.location.reload();
   };
@@ -115,7 +115,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
 
   const handleSave = async () => {
     if (editedProduct.price < editedProduct.price) {
-      alert("Цена не может быть ниже текущей стоимости.");
+      alert('Цена не может быть ниже текущей стоимости.');
       return;
     }
 
@@ -129,8 +129,8 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
       setEditedProduct(result);
       setEditMode(false);
     } catch (error) {
-      console.error("Ошибка при сохранении изменений:", error);
-      alert("Произошла ошибка при сохранении. Пожалуйста, попробуйте снова.");
+      console.error('Ошибка при сохранении изменений:', error);
+      alert('Произошла ошибка при сохранении. Пожалуйста, попробуйте снова.');
     }
   };
 
@@ -354,8 +354,11 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 1) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-5">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <h2>Внимание</h2>
@@ -381,8 +384,11 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
           </>
         ) : (
           <div className="modal-overlay">
-            <div className="modal-content p-5">
-              <button className="close-button" onClick={onClose}>
+            <div className="modal-content p-3 relative">
+              <button
+                className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+                onClick={onClose}
+              >
                 &#215;
               </button>
               <p>Выберите способ оплаты</p>
@@ -418,8 +424,11 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 3) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-5">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <p>
@@ -431,7 +440,7 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
             P)
           </p>
           <h2>
-            В телеграм:{" "}
+            В телеграм:{' '}
             <a href="https://t.me/manager_kazaka">@manager_kazaka</a>
           </h2>
         </div>
@@ -442,14 +451,17 @@ const CardModal = ({ user, isOpen, onClose, admin, product }) => {
   if (step === 4) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-5">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <h2>
             Переведите на данный счет {total} (
             {(Number(total) / course).toFixed(2)}
-            P):{" "}
+            P):{' '}
           </h2>
           <p>Сеть: TRC20 (Tron)</p>
           <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>

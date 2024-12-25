@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
-import "../styles/HistoryCard.css";
-import { getSaleInHistoryById } from "../server";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { useEffect, useState } from 'react';
+import { getSaleInHistoryById } from '../server';
+import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from './ui/dialog';
 
 const HistoryCard = ({ id }) => {
-  const [status, setStatus] = useState("Зарезервирован");
+  const [status, setStatus] = useState('Зарезервирован');
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -24,7 +23,7 @@ const HistoryCard = ({ id }) => {
         const response = await getSaleInHistoryById(id);
         setProduct(response);
       } catch (err) {
-        setError("Failed to fetch product data");
+        setError('Failed to fetch product data');
         console.error(err);
       } finally {
         setLoading(false);
@@ -37,13 +36,13 @@ const HistoryCard = ({ id }) => {
   useEffect(() => {
     if (Object.keys(product).length > 0) {
       if (product.collected_now === product.collected_need) {
-        setStatus("Завершен");
+        setStatus('Завершен');
       } else if (product.cancel) {
-        setStatus("Отменен");
+        setStatus('Отменен');
       } else if (product.deleted) {
-        setStatus("Удален");
+        setStatus('Удален');
       } else {
-        setStatus("Зарезервирован");
+        setStatus('Зарезервирован');
       }
     }
   }, [product]);
@@ -64,47 +63,55 @@ const HistoryCard = ({ id }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = String(date.getFullYear()).slice(-4);
 
     return `${day}.${month}.${year}`;
   };
 
-  const color = isCompleted
-    ? "gray"
-    : progressPercentage >= 70
-    ? "hsl(221.2 83.2% 53.3%)"
-    : progressPercentage >= 50
-    ? "#E2FF31"
-    : progressPercentage >= 20
-    ? "#5285E8"
-    : "#FF1515";
-
   return (
-    <Card key={product.id}>
+    <Card
+      key={product.id}
+      className="hover:shadow-md transition-shadow duration-300"
+    >
       <CardContent className="p-4">
-        <div className="flex items-center space-x-4">
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            width={130}
-            height={80}
-            className="rounded-md"
-          />
-          <div className="flex-1">
-            <h2 className="text-lg w-fit font-semibold">{product.name}</h2>
-            <div className="flex justify-between items-center mt-2">
-              <Badge variant={status === "Завершен" ? "default" : "secondary"}>
+        <div className="flex gap-4 w-full">
+          <div className="shrink-0 w-[130px] h-[120px]">
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="rounded-lg object-cover w-full h-full"
+            />
+          </div>
+
+          <div className="flex-1 flex flex-col justify-between min-w-0 h-[120px]">
+            <div className="flex flex-col items-start gap-2 w-full">
+              <h2 className="text-lg font-semibold truncate w-full text-left">
+                {product.name}
+              </h2>
+              <Badge
+                variant={status === 'Завершен' ? 'default' : 'secondary'}
+                className="w-fit"
+              >
                 {status}
               </Badge>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                Количество: {product.quantity} шт.
+              </p>
               <p className="font-medium">
                 ${product.price * (product.quantity || 1)}
               </p>
             </div>
+
+            <div className="flex justify-start">
+              <CollectionDetails collection={product} status={status} />
+            </div>
           </div>
         </div>
-        <CollectionDetails collection={product} status={status} />
       </CardContent>
     </Card>
   );
@@ -113,45 +120,49 @@ const HistoryCard = ({ id }) => {
 function CollectionDetails({ collection, status }) {
   return (
     <Dialog>
-      <DialogTrigger className="mt-1" asChild>
+      <DialogTrigger asChild>
         <Button
-          variant="ghost"
-          className="w-fit justify-start p-2 text-sm ml-auto"
+          variant="secondary"
+          size="sm"
+          className="hover:bg-secondary/80 transition-colors"
         >
           Подробнее
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{collection.name}</DialogTitle>
+          <DialogTitle className="text-xl">{collection.name}</DialogTitle>
         </DialogHeader>
+
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Предоплата:</p>
-            <p>${collection.price * (collection.quantity || 1) * 0.1}</p>
-          </div>
-          <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Количество:</p>
-            <p>{collection.quantity} шт.</p>
-          </div>
-          <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Цена за единицу:</p>
-            <p>${collection.price}</p>
-          </div>
-          <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Полная цена:</p>
-            <p>${collection.price * (collection.quantity || 1)}</p>
-          </div>
-          {/* <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Дата заказа:</p>
-            <p>{formatDate(collection.orderDate)}</p>
-          </div> */}
-          <div className="grid grid-cols-2 items-center gap-4">
-            <p className="text-sm font-medium">Статус:</p>
-            <Badge variant={status === "Завершен" ? "default" : "secondary"}>
-              {status}
-            </Badge>
-          </div>
+          {[
+            [
+              'Предоплата',
+              `$${collection.price * (collection.quantity || 1) * 0.1}`,
+            ],
+            ['Количество', `${collection.quantity} шт.`],
+            ['Цена за единицу', `$${collection.price}`],
+            [
+              'Полная цена',
+              `$${collection.price * (collection.quantity || 1)}`,
+            ],
+            ['Статус', status],
+          ].map(([label, value]) => (
+            <div key={value} className="grid grid-cols-2 items-center gap-4">
+              <p className="text-sm font-medium text-muted-foreground">
+                {label}:
+              </p>
+              {label === 'Статус' ? (
+                <Badge
+                  variant={status === 'Завершен' ? 'default' : 'secondary'}
+                >
+                  {status}
+                </Badge>
+              ) : (
+                <p className="text-sm">{value}</p>
+              )}
+            </div>
+          ))}
         </div>
       </DialogContent>
     </Dialog>

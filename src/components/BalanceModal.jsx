@@ -1,18 +1,18 @@
 // BalanceModal.js
-import React, { useEffect, useState } from "react";
-import "../styles/Modal.css";
+import React, { useEffect, useState } from 'react';
+import '../styles/Modal.css';
 import {
   createLog,
   createBybitTransaction,
   verifyBybitTransaction,
   getCource,
-} from "../server";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+} from '../server';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 
 const BalanceModal = ({ user, onClose }) => {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [step, setStep] = useState(0);
   const [total, setTotal] = useState(0);
   const [course, setCourse] = useState(0);
@@ -33,12 +33,12 @@ const BalanceModal = ({ user, onClose }) => {
   const handlePay = async () => {
     try {
       await createLog(`Запросил пополнение через менеджера на $${amount}`);
-      alert("Свяжитесь с менеджером для пополнения баланса");
+      alert('Свяжитесь с менеджером для пополнения баланса');
       setStep(3); // Step to show confirmation
     } catch (error) {
-      console.error("Ошибка при пополнении баланса:", error);
+      console.error('Ошибка при пополнении баланса:', error);
       alert(
-        "Произошла ошибка при пополнении баланса. Пожалуйста, попробуйте снова."
+        'Произошла ошибка при пополнении баланса. Пожалуйста, попробуйте снова.'
       );
     }
   };
@@ -55,17 +55,17 @@ const BalanceModal = ({ user, onClose }) => {
       await createBybitTransaction(total); // Proceed with the USDT transaction
       setStep(4); // Move to the confirmation step
     } catch (error) {
-      console.error("Ошибка при оплате USDT:", error);
-      alert("Ошибка при оплате USDT. Пожалуйста, попробуйте снова.");
+      console.error('Ошибка при оплате USDT:', error);
+      alert('Ошибка при оплате USDT. Пожалуйста, попробуйте снова.');
     }
   };
 
   const handleConfirmPayment = async () => {
     const response = await verifyBybitTransaction();
     if (response) {
-      alert("Покупка успешно подтверждена");
+      alert('Покупка успешно подтверждена');
     } else {
-      alert("Процесс перевода средств ещё не окончился");
+      alert('Процесс перевода средств ещё не окончился');
     }
   };
 
@@ -73,14 +73,17 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 0) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-3">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <h2>Пополнить баланс</h2>
           <h2>
             Сейчас на счету: ${user.balance} (
-            {(Number(user.balance) / course).toFixed(2)}P){" "}
+            {(Number(user.balance) / course).toFixed(2)}P){' '}
           </h2>
 
           <Input
@@ -105,8 +108,11 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 1) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-3">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <h2>Выберите способ пополнения</h2>
@@ -131,23 +137,28 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 3) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-3">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
-          <p>
-            Свяжитесь с менеджером для оплаты ${amount} (
-            {(Number(amount) / course).toFixed(2)}P)
-          </p>
-          <h2>
-            В телеграм:{" "}
-            <Link to="https://t.me/manager_kazaka">@manager_kazaka</Link>
-          </h2>
-          <Link to="https://t.me/manager_kazaka">
-            <Button className="w-full" onClick={handleConfirmPayment}>
-              Перейти в телеграм
-            </Button>
-          </Link>
+          <div className="pt-8 space-y-4">
+            <p>
+              Свяжитесь с менеджером для оплаты ${amount} (
+              {(Number(amount) / course).toFixed(2)}P)
+            </p>
+            <h2>
+              В телеграм:{' '}
+              <Link to="https://t.me/manager_kazaka">@manager_kazaka</Link>
+            </h2>
+            <Link to="https://t.me/manager_kazaka">
+              <Button className="w-full" onClick={handleConfirmPayment}>
+                Перейти в телеграм
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -157,13 +168,16 @@ const BalanceModal = ({ user, onClose }) => {
   if (step === 4) {
     return (
       <div className="modal-overlay">
-        <div className="modal-content p-3">
-          <button className="close-button" onClick={onClose}>
+        <div className="modal-content p-3 relative">
+          <button
+            className="absolute right-3 top-3 w-6 h-6 flex items-center justify-center rounded-md"
+            onClick={onClose}
+          >
             &#215;
           </button>
           <h2>
             Переведите на данный счет ${total} (
-            {(Number(amount) / course).toFixed(2)}P):{" "}
+            {(Number(amount) / course).toFixed(2)}P):{' '}
           </h2>
           <p>Сеть: TRC20 (Tron)</p>
           <p>Адрес кошелька: TQfrEu1sP4iF4xTZUqGsjQzNGKEeFnyjrQ</p>
