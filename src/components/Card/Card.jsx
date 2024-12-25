@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -7,13 +7,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Progress } from "../ui/progress";
+} from '../ui/card';
+import { Progress } from '../ui/progress';
 
-import { Button } from "../ui/button";
-import CardModal from "./CardModal";
-import CardMembersModal from "./CardMembersModal";
-import { deleteSale } from "../../server";
+import { Button } from '../ui/button';
+import CardModal from './CardModal';
+import CardMembersModal from './CardMembersModal';
+import { deleteSale } from '../../server';
 
 const ProductCard = ({
   user,
@@ -56,42 +56,51 @@ const ProductCard = ({
 
   // Determine color based on progress
   const color = isCompleted
-    ? "gray"
+    ? 'gray'
     : progressPercentage >= 70
-    ? "hsl(221.2 83.2% 53.3%)"
+    ? 'hsl(221.2 83.2% 53.3%)'
     : progressPercentage >= 50
-    ? "#E2FF31"
+    ? '#E2FF31'
     : progressPercentage >= 20
-    ? "#5285E8"
-    : "#FF1515";
+    ? '#5285E8'
+    : '#FF1515';
 
   return (
     <>
       <Card
-        className={`w-full ${isCompleted && "hidden"}`}
+        className={`w-full group transition-all duration-300 hover:-translate-y-1 hover:shadow-lg rounded-xl ${
+          isCompleted && 'hidden'
+        }`}
         style={{ order: collected_need - collected_now }}
       >
         <CardContent className="p-0">
-          <img
-            src={images[0]}
-            alt={name}
-            width={400}
-            height={200}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4">
-            <h3 className="font-semibold text-lg mb-2">{name}</h3>
-            <p className="text-sm text-muted-foreground mb-2">
-              ${price.toFixed(2)}
-            </p>
-            <Progress value={progressPercentage} className="mb-2" />
+          <div className="relative overflow-hidden rounded-t-xl">
+            <img
+              src={images[0]}
+              alt={name}
+              width={400}
+              height={200}
+              className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="text-white font-medium">Подробнее</span>
+            </div>
+          </div>
+          <div className="p-4 space-y-3">
+            <h3 className="font-semibold text-lg tracking-tight">{name}</h3>
+            <p className="text-sm text-muted-foreground">${price.toFixed(2)}</p>
+            <Progress
+              value={progressPercentage}
+              className="h-2 bg-gray-200"
+              indicatorClassName="bg-black"
+            />
             <p className="text-sm text-muted-foreground">
               Собрано {collected_now} из {collected_need} шт.
             </p>
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={handleShow}>
+          <Button className="w-full transition-colors" onClick={handleShow}>
             Подробнее
           </Button>
         </CardFooter>

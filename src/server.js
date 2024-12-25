@@ -3,8 +3,8 @@ import * as cheerio from 'cheerio';
 
 const baseURL =
   window.location.hostname === 'localhost'
-    ? 'http://localhost:3000'
-    : 'http://193.168.3.81:3001';
+    ? 'https://api.sklad4phone.ru'
+    : 'https://api.sklad4phone.ru';
 
 // const baseURL = "https://api.sklad4phone.ru";
 
